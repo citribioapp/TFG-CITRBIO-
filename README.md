@@ -273,6 +273,7 @@ npm start
 - Frontend local: `http://localhost:4200`
 - Backend local: `http://127.0.0.1:8080`
 - Swagger local: `http://127.0.0.1:8080/api/doc`
+- Swagger produccion: `https://citribio-backend-production-3153.up.railway.app/api/doc`
 - Frontend de produccion: el que se configure en despliegue
 - Backend de produccion: el que se configure en Railway
 
@@ -351,9 +352,54 @@ El backend esta preparado para Railway con:
 - migraciones automaticas
 - preparacion de JWT y uploads
 
+Flujo de despliegue recomendado:
+
+1. Subir el proyecto a GitHub.
+2. Crear el servicio en Railway y conectarlo al repositorio.
+3. Añadir la base de datos MySQL o MariaDB en Railway.
+4. Configurar las variables de entorno del backend.
+5. Dejar que `start.sh` instale dependencias, genere las claves JWT, enlace la carpeta de uploads y ejecute las migraciones.
+6. Verificar la API y Swagger en `/api/doc`.
+
+Variables clave:
+
+- `APP_ENV=prod`
+- `APP_SECRET`
+- `DATABASE_URL` o variables del plugin MySQL
+- `JWT_PASSPHRASE`
+- `JWT_SECRET_KEY`
+- `JWT_PUBLIC_KEY`
+- `CORS_ALLOW_ORIGINS`
+- `MAILER_FROM`
+- `RESEND_API_KEY`
+- `CONTACT_TO_EMAIL`
+- `CONTACT_FROM_EMAIL`
+- `ORDER_NOTIFICATION_EMAIL`
+- `FRONTEND_URL`
+
+Consideraciones tecnicas:
+
+- Railway usa MariaDB 10.6 en su plugin MySQL, por eso `DATABASE_URL` debe incluir `serverVersion=mariadb-10.6.0`.
+- El host debe ser el de Railway, no `localhost` ni `127.0.0.1`.
+- `start.sh` prepara la carpeta persistente de `public/uploads/products`.
+- Las claves JWT pueden viajar en base64 por variables de entorno y el script las decodifica.
+
 ### Frontend
 
-El frontend se despliega como aplicacion web independiente.
+El frontend se despliega como aplicacion web independiente, normalmente en Vercel u otra plataforma similar.
+
+Flujo de despliegue recomendado:
+
+1. Crear el proyecto frontend desde GitHub.
+2. Configurar la URL de la API del backend desplegado.
+3. Publicar la aplicacion.
+4. Verificar login, catalogo, carrito, pedidos y formularios.
+
+Variables clave del frontend:
+
+- URL de la API del backend
+- entorno de produccion
+- analiticas si se usan
 
 ### GitHub
 
