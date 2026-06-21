@@ -1,0 +1,34 @@
+.env.local
+.env.*.local
+.env.dev
+.DS_Store
+
+/vendor/
+/var/
+/public/uploads/
+config/jwt/*.pem
+.phpunit.cache/
+
+# ###> symfony/framework-bundle ###
+# /.env.local
+# /.env.local.php
+# /.env.*.local
+# /config/secrets/prod/prod.decrypt.private.php
+# /public/bundles/
+# /var/
+# /vendor/
+# ###< symfony/framework-bundle ###
+
+# ###> Configuración de Entorno (IMPORTANTE) ###
+# .env
+# .env.dev
+# .env.test
+# .env.example
+# ###< Configuración de Entorno ###
+
+# ###> Archivos del Sistema y Editores ###
+# .DS_Store
+# Thumbs.db
+# .vscode/
+# .idea/
+# ###< Archivos del Sistema y Editores ###

@@ -1,0 +1,347 @@
+<div class="min-h-screen bg-citri-gray-50">
+
+  <!-- ── Page header ──────────────────────────────────────────────────────── -->
+  <div class="bg-citri-green" data-order-page-top>
+    <div class="max-w-7xl mx-auto px-4 py-8 md:py-10 flex flex-wrap items-center justify-between gap-4">
+      <div>
+        <p class="text-white text-sm font-medium uppercase tracking-wide mb-1">Admin</p>
+        <h1 class="font-citri-sans font-bold text-white text-2xl md:text-3xl">Pedidos</h1>
+        <p class="text-white text-sm mt-1">Consulta el listado de pedidos recibidos y su estado.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Back link ─────────────────────────────────────────────────────────── -->
+  <div class="max-w-7xl mx-auto px-4 pt-6 pb-0">
+    <a routerLink="/admin"
+      class="inline-flex items-center gap-1.5 text-sm font-medium text-citri-gray-600 hover:text-citri-green transition-colors">
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+      </svg>
+      Panel admin
+    </a>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-4 py-8 md:py-10">
+
+    @if (errorMessage()) {
+      <div class="mb-6 rounded-citri-sm bg-red-50 border border-red-200 px-4 py-3" role="alert" data-order-alert>
+        <p class="text-red-700 text-sm">{{ errorMessage() }}</p>
+      </div>
+    }
+
+    <!-- ── Status filter cards ──────────────────────────────────────────── -->
+    @if (!isLoading()) {
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-8">
+        @for (filter of statusFilters; track filter.key) {
+          <button
+            type="button"
+            (click)="setFilter(filter.key)"
+            [attr.aria-pressed]="activeFilter() === filter.key"
+            class="group relative overflow-hidden flex flex-col items-start gap-1 rounded-citri-lg border-2 bg-white px-4 py-4 text-left shadow-citri-card transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-citri-green focus-visible:ring-offset-2"
+            [class]="activeFilter() === filter.key
+              ? 'border-citri-green'
+              : 'border-citri-gray-300 hover:border-citri-green/60 hover:shadow-citri-nav'"
+          >
+            <span
+              class="font-citri-sans font-bold text-2xl leading-none transition-colors duration-150"
+              [class]="activeFilter() === filter.key ? 'text-citri-green' : 'text-citri-gray-900'"
+            >
+              {{ statusCounts()[filter.key] }}
+            </span>
+            <span
+              class="text-xs font-semibold leading-snug transition-colors duration-150"
+              [class]="activeFilter() === filter.key ? 'text-citri-green' : 'text-citri-gray-600'"
+            >
+              {{ filter.label }}
+            </span>
+          </button>
+        }
+      </div>
+    }
+
+    <!-- ── Search input ────────────────────────────────────────────────── -->
+    @if (!isLoading()) {
+      <div class="relative mb-6">
+        <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5" aria-hidden="true">
+          <svg class="w-4 h-4 text-citri-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
+          </svg>
+        </span>
+        <input
+          type="search"
+          id="orders-search"
+          [ngModel]="searchQuery()"
+          (ngModelChange)="searchQuery.set($event)"
+          placeholder="Buscar por nº de pedido, cliente, email o teléfono"
+          autocomplete="off"
+          class="w-full rounded-citri-md border border-citri-gray-300 bg-white py-2.5 pl-10 pr-10 text-sm text-citri-gray-900 placeholder:text-citri-gray-600 shadow-citri-card transition-colors focus:border-citri-green focus:outline-none focus:ring-2 focus:ring-citri-green/30"
+        />
+        @if (searchQuery()) {
+          <button
+            type="button"
+            (click)="clearSearch()"
+            aria-label="Limpiar búsqueda"
+            class="absolute inset-y-0 right-0 flex items-center pr-3 text-citri-gray-600 hover:text-citri-gray-900 transition-colors"
+          >
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        }
+      </div>
+    }
+
+    <!-- ── Order list ───────────────────────────────────────────────────── -->
+    @if (isLoading()) {
+      <p class="text-sm text-citri-gray-600">Cargando pedidos...</p>
+    } @else if (filteredOrders().length === 0) {
+      <div class="bg-white rounded-citri-lg shadow-citri-card p-8 text-center">
+        <p class="text-sm text-citri-gray-600">
+          @if (hasActiveFilters()) {
+            No se encontraron pedidos con estos filtros.
+          } @else {
+            Todavía no hay pedidos registrados.
+          }
+        </p>
+      </div>
+    } @else {
+      <div class="grid gap-4">
+        @for (order of filteredOrders(); track order.id) {
+
+          @let action = getActionConfig(order);
+
+          <article class="bg-white rounded-citri-lg shadow-citri-card overflow-hidden border border-citri-gray-200">
+
+            <!-- ── Card header: ID + badge + date ──────────────────────── -->
+            <div class="flex flex-wrap items-center justify-between gap-2 px-5 pt-4 pb-3 border-b border-citri-gray-100">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="text-xs font-bold text-citri-gray-500 bg-citri-gray-100 px-2.5 py-1 rounded-citri-full tracking-wide">
+                  Pedido #{{ order.id }}
+                </span>
+                <span class="text-xs font-semibold px-2.5 py-1 rounded-citri-full"
+                  [class]="getStatusClass(order.status)">
+                  {{ getStatusLabel(order.status) }}
+                </span>
+              </div>
+              <span class="text-xs text-citri-gray-500 font-medium">
+                {{ formatDate(order.createdAt) }}
+              </span>
+            </div>
+
+            <!-- ── Card body ───────────────────────────────────────────── -->
+            <div class="px-5 py-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-2 text-sm mb-4">
+
+                <!-- Customer -->
+                <div>
+                  <p class="text-[10px] font-bold uppercase tracking-wider text-citri-gray-400 mb-0.5">Cliente</p>
+                  <p class="font-semibold text-citri-gray-900 truncate">{{ order.customer.name || 'Sin nombre' }}</p>
+                </div>
+
+                <!-- Email -->
+                <div>
+                  <p class="text-[10px] font-bold uppercase tracking-wider text-citri-gray-400 mb-0.5">Email</p>
+                  <p class="text-citri-gray-700 truncate">{{ order.customer.email || '—' }}</p>
+                </div>
+
+                <!-- Phone -->
+                <div>
+                  <p class="text-[10px] font-bold uppercase tracking-wider text-citri-gray-400 mb-0.5">Teléfono</p>
+                  <p class="text-citri-gray-700">{{ order.customer.phone || '—' }}</p>
+                </div>
+
+                <!-- Address — full width -->
+                <div class="sm:col-span-2 lg:col-span-2">
+                  <p class="text-[10px] font-bold uppercase tracking-wider text-citri-gray-400 mb-0.5">Dirección de entrega</p>
+                  <p class="text-citri-gray-700 leading-snug">{{ order.deliveryAddress || '—' }}</p>
+                </div>
+
+                <!-- Total — highlighted when available -->
+                <div>
+                  <p class="text-[10px] font-bold uppercase tracking-wider text-citri-gray-400 mb-0.5">Total</p>
+                  @if (order.totalPrice != null) {
+                    <p class="text-lg font-bold text-[#80ba1b]">{{ formatCurrency(order.totalPrice) }}</p>
+                  } @else {
+                    <p class="text-sm text-citri-gray-400 italic">Pendiente de presupuesto</p>
+                  }
+                </div>
+
+              </div>
+
+              <!-- ── Actions row ─────────────────────────────────────────── -->
+              <div class="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-citri-gray-100">
+
+                <!-- Status selector -->
+                <div class="flex flex-wrap items-center gap-2">
+                  <label [for]="'status-' + order.id" class="text-xs font-semibold text-citri-gray-600 shrink-0">
+                    Estado:
+                  </label>
+                  <select
+                    [id]="'status-' + order.id"
+                    [value]="order.status"
+                    (change)="onStatusChange(order.id, $event)"
+                    [disabled]="isUpdating(order.id)"
+                    class="text-xs px-2.5 py-1.5 border border-citri-gray-300 rounded-citri-sm bg-white text-citri-gray-900 focus:outline-none focus:ring-2 focus:ring-citri-green focus:border-citri-green disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <option value="under_review">En revisión</option>
+                    <option value="quote_sent">Presupuesto enviado</option>
+                    <option value="payment_received">Pago recibido</option>
+                    <option value="shipped">Enviado</option>
+                  </select>
+                  @if (isUpdating(order.id)) {
+                    <span class="text-xs text-citri-gray-500 italic">Actualizando...</span>
+                  }
+                </div>
+
+                <!-- Primary action button -->
+                <div class="flex items-center gap-2">
+                  <!-- Expand/collapse items toggle -->
+                  <button
+                    type="button"
+                    (click)="toggleOrder(order.id)"
+                    class="inline-flex items-center gap-1.5 rounded-citri-sm border border-citri-gray-300 bg-white px-3 py-1.5 text-xs font-semibold text-citri-gray-700 hover:bg-citri-gray-50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-citri-green focus-visible:ring-offset-1"
+                    [attr.aria-expanded]="isExpanded(order.id)"
+                  >
+                    <svg class="w-3.5 h-3.5 transition-transform duration-200"
+                      [class.rotate-180]="isExpanded(order.id)"
+                      fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                    </svg>
+                    {{ isExpanded(order.id) ? 'Ocultar líneas' : 'Ver líneas' }}
+                  </button>
+
+                  <!-- Main CTA -->
+                  @if (action.link) {
+                    <a
+                      [routerLink]="action.link"
+                      [class]="action.classes"
+                    >
+                      <svg class="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        @switch (order.status.trim().toLowerCase()) {
+                          @case ('under_review') {
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z" />
+                          }
+                          @case ('payment_received') {
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
+                          }
+                          @default {
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                          }
+                        }
+                      </svg>
+                      {{ action.label }}
+                    </a>
+                  }
+                </div>
+
+              </div>
+            </div>
+
+            <!-- ── Expanded items panel ────────────────────────────────── -->
+            @if (isExpanded(order.id)) {
+              <div class="border-t border-citri-gray-100 bg-citri-gray-50 px-5 pb-5 pt-4">
+                @if ((order.items?.length ?? 0) === 0) {
+                  <p class="text-sm text-citri-gray-500 italic">El detalle de líneas del pedido no está disponible todavía.</p>
+                } @else {
+
+                  <!-- Mobile: cards -->
+                  <div class="grid gap-3 md:hidden">
+                    @for (item of order.items; track item.id) {
+                      <div class="rounded-citri-md bg-white border border-citri-gray-200 p-4 shadow-sm">
+                        <p class="font-semibold text-citri-gray-900 text-sm mb-2">{{ item.product }}</p>
+                        <div class="grid grid-cols-2 gap-x-4 gap-y-2">
+                          <div>
+                            <p class="text-[10px] font-semibold uppercase tracking-wide text-citri-gray-400">Calibre</p>
+                            <p class="text-xs text-citri-gray-800 mt-0.5">{{ item.caliber !== '-' ? item.caliber : '—' }}</p>
+                          </div>
+                          <div>
+                            <p class="text-[10px] font-semibold uppercase tracking-wide text-citri-gray-400">Calidad</p>
+                            <p class="text-xs text-citri-gray-800 mt-0.5">{{ item.quality !== '-' ? item.quality : '—' }}</p>
+                          </div>
+                          <div>
+                            <p class="text-[10px] font-semibold uppercase tracking-wide text-citri-gray-400">Formato</p>
+                            <p class="text-xs text-citri-gray-800 mt-0.5">{{ item.format !== '-' ? item.format : '—' }}</p>
+                          </div>
+                          <div>
+                            <p class="text-[10px] font-semibold uppercase tracking-wide text-citri-gray-400">Cantidad</p>
+                            <span class="inline-flex items-center justify-center mt-0.5 px-2.5 py-0.5 bg-citri-green text-white text-xs font-bold rounded-full">{{ item.quantity }}</span>
+                          </div>
+                          @if (item.unitPrice != null) {
+                            <div>
+                              <p class="text-[10px] font-semibold uppercase tracking-wide text-citri-gray-400">P. Unit.</p>
+                              <p class="text-xs font-semibold text-citri-gray-800 mt-0.5">{{ formatCurrency(item.unitPrice) }}</p>
+                            </div>
+                            <div>
+                              <p class="text-[10px] font-semibold uppercase tracking-wide text-citri-gray-400">Subtotal</p>
+                              <p class="text-xs font-bold text-citri-gray-900 mt-0.5">{{ formatCurrency(item.lineTotal ?? 0) }}</p>
+                            </div>
+                          }
+                        </div>
+                      </div>
+                    }
+                  </div>
+
+                  <!-- Desktop: table -->
+                  <div class="hidden overflow-x-auto md:block">
+                    <table class="min-w-full text-sm">
+                      <thead>
+                        <tr class="border-b-2 border-citri-green/20">
+                          <th class="pb-2.5 pr-4 text-left text-xs font-semibold text-citri-green uppercase tracking-wide">Producto</th>
+                          <th class="pb-2.5 pr-4 text-left text-xs font-semibold text-citri-green uppercase tracking-wide">Calibre</th>
+                          <th class="pb-2.5 pr-4 text-left text-xs font-semibold text-citri-green uppercase tracking-wide">Calidad</th>
+                          <th class="pb-2.5 pr-4 text-left text-xs font-semibold text-citri-green uppercase tracking-wide">Formato</th>
+                          <th class="pb-2.5 pr-4 text-center text-xs font-semibold text-citri-green uppercase tracking-wide">Cant.</th>
+                          <th class="pb-2.5 pr-4 text-right text-xs font-semibold text-citri-green uppercase tracking-wide">P. Unit.</th>
+                          <th class="pb-2.5 text-right text-xs font-semibold text-citri-green uppercase tracking-wide">Subtotal</th>
+                        </tr>
+                      </thead>
+                      <tbody class="divide-y divide-citri-gray-100">
+                        @for (item of order.items; track item.id) {
+                          <tr class="hover:bg-white transition-colors">
+                            <td class="py-3 pr-4 font-semibold text-citri-gray-900">{{ item.product }}</td>
+                            <td class="py-3 pr-4 text-citri-gray-600">{{ item.caliber !== '-' ? item.caliber : '—' }}</td>
+                            <td class="py-3 pr-4 text-citri-gray-600">{{ item.quality !== '-' ? item.quality : '—' }}</td>
+                            <td class="py-3 pr-4 text-citri-gray-600">{{ item.format !== '-' ? item.format : '—' }}</td>
+                            <td class="py-3 pr-4 text-center">
+                              <span class="inline-flex items-center justify-center px-2.5 py-0.5 bg-citri-green text-white text-xs font-bold rounded-full min-w-[28px]">{{ item.quantity }}</span>
+                            </td>
+                            <td class="py-3 pr-4 text-right text-citri-gray-700">
+                              {{ item.unitPrice != null ? formatCurrency(item.unitPrice) : '—' }}
+                            </td>
+                            <td class="py-3 text-right font-semibold text-citri-gray-900">
+                              {{ item.lineTotal != null ? formatCurrency(item.lineTotal) : '—' }}
+                            </td>
+                          </tr>
+                        }
+                      </tbody>
+                      <!-- Totals footer when prices are available -->
+                      @if (order.totalPrice != null) {
+                        <tfoot>
+                          <tr class="border-t-2 border-citri-green/20">
+                            <td colspan="5" class="pt-3 text-xs text-citri-gray-500 text-right pr-4">Subtotal productos</td>
+                            <td colspan="2" class="pt-3 text-right text-sm font-semibold text-citri-gray-800">{{ formatCurrency(order.productsSubtotal ?? 0) }}</td>
+                          </tr>
+                          <tr>
+                            <td colspan="5" class="py-1 text-xs text-citri-gray-500 text-right pr-4">Gastos de envío</td>
+                            <td colspan="2" class="py-1 text-right text-sm font-semibold text-citri-gray-800">{{ formatCurrency(order.shippingPrice ?? 0) }}</td>
+                          </tr>
+                          <tr>
+                            <td colspan="5" class="pt-1 pb-2 text-sm font-bold text-citri-gray-900 text-right pr-4">TOTAL</td>
+                            <td colspan="2" class="pt-1 pb-2 text-right text-base font-bold text-[#80ba1b]">{{ formatCurrency(order.totalPrice) }}</td>
+                          </tr>
+                        </tfoot>
+                      }
+                    </table>
+                  </div>
+
+                }
+              </div>
+            }
+
+          </article>
+        }
+      </div>
+    }
+  </div>
+</div>

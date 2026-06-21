@@ -1,0 +1,25 @@
+<div
+  role="img"
+  [attr.aria-label]="title"
+  class="relative flex items-start justify-center bg-citri-gray-900"
+  [class]="heightClass + ' ' + paddingClass"
+  [style.backgroundImage]="'url(' + backgroundImage + ')'"
+  [style.backgroundSize]="'cover'"
+  [style.backgroundPosition]="'center'"
+>
+  <!-- Overlay: dark neutral so the image stays natural and premium -->
+  <div
+    class="absolute inset-0"
+    [style.background]="'linear-gradient(to bottom, rgba(0,0,0,' + overlayOpacity + ') 0%, rgba(0,0,0,' + (overlayOpacity * 0.7) + ') 100%)'"
+  ></div>
+
+  <!-- Content -->
+  <div class="relative z-10 px-6 w-full max-w-7xl mx-auto">
+    <h1 [class]="titleClass">
+      {{ title }}
+    </h1>
+    @if (subtitle) {
+      <p class="text-white text-xl md:text-2xl font-bold mt-4 text-left md:text-center drop-shadow-md">{{ subtitle }}</p>
+    }
+  </div>
+</div>

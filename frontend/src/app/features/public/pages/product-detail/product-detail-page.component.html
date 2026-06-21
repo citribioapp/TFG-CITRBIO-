@@ -1,0 +1,179 @@
+<div class="min-h-screen bg-citri-gray-50">
+
+  <!-- Back link -->
+  <div class="max-w-6xl mx-auto px-4 pt-6 pb-2">
+    <a [routerLink]="['/productos']" [queryParams]="backQueryParams()"
+      class="inline-flex items-center gap-1.5 text-sm font-medium text-citri-gray-600 hover:text-citri-green transition-colors">
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+      </svg>
+      {{ backLabel }}
+    </a>
+  </div>
+
+  <div class="max-w-6xl mx-auto px-4 py-6 md:py-10">
+
+    @if (errorMessage() && !product()) {
+      <div class="rounded-citri-md bg-red-50 border border-red-200 px-4 py-3">
+        <p class="text-red-700 text-sm">{{ errorMessage() }}</p>
+      </div>
+    }
+
+    @if (isLoading()) {
+      <!-- Skeleton -->
+      <div class="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] animate-pulse">
+        <div class="rounded-citri-lg bg-citri-gray-100 aspect-[4/3]"></div>
+        <div class="space-y-4 pt-2">
+          <div class="h-3 bg-citri-gray-100 rounded w-1/4"></div>
+          <div class="h-7 bg-citri-gray-100 rounded w-3/4"></div>
+          <div class="h-4 bg-citri-gray-100 rounded w-full"></div>
+          <div class="h-4 bg-citri-gray-100 rounded w-2/3"></div>
+        </div>
+      </div>
+
+    } @else if (product(); as currentProduct) {
+      <div class="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-stretch">
+
+        <!-- Image -->
+        <div class="rounded-citri-lg overflow-hidden shadow-citri-card bg-citri-yellow-light lg:h-full">
+          @if (currentProduct.images.length > 0) {
+            <img
+              [src]="resolveImageUrl(currentProduct.images[0].imagePath)"
+              [alt]="currentProduct.name"
+              loading="eager"
+              fetchpriority="high"
+              decoding="async"
+              class="w-full h-full object-cover aspect-[4/3] lg:aspect-auto img-fade"
+              (load)="$any($event.target).classList.add('loaded')"
+            />
+          } @else {
+            <div class="aspect-[4/3] lg:aspect-auto lg:h-full flex flex-col items-center justify-center gap-3">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" class="w-20 h-20" aria-hidden="true">
+                <circle cx="32" cy="32" r="28" fill="#f97316" />
+                <circle cx="32" cy="32" r="18" fill="#fb923c" />
+                <circle cx="32" cy="32" r="8" fill="#fed7aa" />
+              </svg>
+              <p class="text-citri-gray-600 text-sm">Imagen próximamente</p>
+            </div>
+          }
+        </div>
+
+        <!-- Info + form -->
+        <div class="bg-white rounded-citri-lg shadow-citri-card p-6 md:p-8">
+
+          @if (currentProduct.category) {
+            <p class="text-citri-green text-xs font-semibold uppercase tracking-wide mb-2">
+              {{ currentProduct.category.name }}
+            </p>
+          }
+
+          <h1 class="font-citri-sans font-bold text-citri-gray-900 text-2xl md:text-3xl mb-3">
+            {{ currentProduct.name }}
+          </h1>
+
+          <p class="text-citri-gray-600 text-sm leading-relaxed mb-6 pb-6 border-b border-citri-gray-100">
+            {{ currentProduct.description || 'Cítrico de origen mediterráneo, cultivado con cuidado y seleccionado en su punto óptimo de maduración.' }}
+          </p>
+
+          <form class="space-y-4" [formGroup]="form" (ngSubmit)="addToCart()">
+
+            <!-- Calibre -->
+            <div>
+              <label for="detail-caliber" class="block text-sm font-medium text-citri-gray-900 mb-1.5">Calibre</label>
+              <select id="detail-caliber" formControlName="caliberId"
+                class="w-full px-3 py-2.5 rounded-citri-sm border border-citri-gray-300 text-citri-gray-900 text-sm bg-white focus:outline-none focus:ring-2 focus:border-citri-green focus:ring-citri-green/20 transition-colors">
+                <option [value]="0">Selecciona un calibre</option>
+                @for (option of currentProduct.options.calibers; track option.id) {
+                  <option [value]="option.id">{{ option.name }}</option>
+                }
+              </select>
+            </div>
+
+            <!-- Calidad -->
+            <div>
+              <label for="detail-quality" class="block text-sm font-medium text-citri-gray-900 mb-1.5">Calidad</label>
+              <select id="detail-quality" formControlName="qualityId"
+                class="w-full px-3 py-2.5 rounded-citri-sm border border-citri-gray-300 text-citri-gray-900 text-sm bg-white focus:outline-none focus:ring-2 focus:border-citri-green focus:ring-citri-green/20 transition-colors">
+                <option [value]="0">Selecciona una calidad</option>
+                @for (option of currentProduct.options.qualities; track option.id) {
+                  <option [value]="option.id">{{ option.name }}</option>
+                }
+              </select>
+            </div>
+
+            <!-- Formato -->
+            <div>
+              <label for="detail-format" class="block text-sm font-medium text-citri-gray-900 mb-1.5">Formato</label>
+              <select id="detail-format" formControlName="formatId"
+                class="w-full px-3 py-2.5 rounded-citri-sm border border-citri-gray-300 text-citri-gray-900 text-sm bg-white focus:outline-none focus:ring-2 focus:border-citri-green focus:ring-citri-green/20 transition-colors">
+                <option [value]="0">Selecciona un formato</option>
+                @for (option of currentProduct.options.formats; track option.id) {
+                  <option [value]="option.id">{{ option.name }}</option>
+                }
+              </select>
+            </div>
+
+            <!-- Cantidad -->
+            <div>
+              <label for="detail-quantity" class="block text-sm font-medium text-citri-gray-900 mb-1.5">Cantidad</label>
+              <input id="detail-quantity" type="number" min="1" formControlName="quantity"
+                class="w-full px-3 py-2.5 rounded-citri-sm border border-citri-gray-300 text-citri-gray-900 text-sm focus:outline-none focus:ring-2 focus:border-citri-green focus:ring-citri-green/20 transition-colors" />
+            </div>
+
+            <!-- Feedback -->
+            @if (successMessage()) {
+              <div class="rounded-citri-sm bg-citri-green-light border border-citri-green px-4 py-3" role="status">
+                <p class="text-citri-green text-sm font-medium">{{ successMessage() }}</p>
+              </div>
+            }
+            @if (errorMessage()) {
+              <div class="rounded-citri-sm bg-red-50 border border-red-200 px-4 py-3" role="alert">
+                <p class="text-red-700 text-sm">{{ errorMessage() }}</p>
+              </div>
+            }
+
+            <!-- CTA -->
+            @if (currentProduct.isOutOfSeason) {
+              <div class="mt-2 rounded-citri-md bg-orange-50 border border-orange-200 px-4 py-3" role="status">
+                <p class="text-orange-700 text-sm font-medium flex items-center gap-2">
+                  <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                  </svg>
+                  Esta variedad no está disponible actualmente.
+                </p>
+              </div>
+              <a
+                [routerLink]="['/productos']"
+                [fragment]="seasonCalendarFragment()"
+                class="mt-2 w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-citri-green text-white font-semibold rounded-citri-md hover:bg-citri-green-dark transition-colors duration-200"
+              >
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+                </svg>
+                {{ seasonCalendarLabel() }}
+              </a>
+            } @else {
+              <button type="submit"
+                class="w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-citri-green text-white font-semibold rounded-citri-md hover:bg-citri-green-dark transition-colors duration-200 mt-2">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3.75h1.386a1.5 1.5 0 0 1 1.456 1.14l.383 1.53m0 0H19.5l-1.5 7.5H8.214m-2.739-7.5L6.75 15.75A1.5 1.5 0 0 0 8.214 17.25H18" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 20.25a.75.75 0 1 1 0-1.5a.75.75 0 0 1 0 1.5Zm9 0a.75.75 0 1 1 0-1.5a.75.75 0 0 1 0 1.5Z" />
+                </svg>
+                Añadir al carrito
+              </button>
+            }
+
+          </form>
+        </div>
+
+      </div>
+    }
+  </div>
+</div>
+
+@if (showLoginModal()) {
+  <app-login-modal
+    (confirm)="onModalConfirm()"
+    (cancel)="onModalCancel()"
+  />
+}

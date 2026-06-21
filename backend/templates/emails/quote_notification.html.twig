@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tu presupuesto Citribio está listo — Pedido #{{ order.id }}</title>
+</head>
+<body style="margin:0;padding:0;background-color:#f5f3ee;font-family:Arial,Helvetica,sans-serif;color:#1a2e1c;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
+
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color:#f5f3ee;">
+  <tr>
+    <td align="center" style="padding:36px 12px;">
+
+      <!-- ── Email card ──────────────────────────────────────────────────── -->
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0"
+             style="max-width:660px;margin:0 auto;background-color:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 2px 16px rgba(0,0,0,0.09);">
+
+        <!-- ── Header ─────────────────────────────────────────────────────── -->
+        <tr>
+          <td align="center" style="background-color:#567f0b;padding:32px 36px 28px;">
+            {% if logoUrl is defined and logoUrl %}
+              <img src="{{ logoUrl }}" alt="Citribio" width="160"
+                   style="display:block;margin:0 auto 20px;height:64px;width:auto;max-width:200px;" />
+            {% else %}
+              <div style="font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.65);margin-bottom:14px;">CITRIBIO</div>
+            {% endif %}
+            <h1 style="margin:0 0 10px;font-size:24px;font-weight:700;color:#ffffff;line-height:1.2;">
+              Tu pedido de Citribio ha sido revisado
+            </h1>
+            <p style="margin:0;font-size:14px;color:rgba(255,255,255,0.88);line-height:1.55;">
+              Pedido <strong style="color:#ffffff;">#{{ order.id }}</strong>
+            </p>
+          </td>
+        </tr>
+
+        <!-- ── Greeting ───────────────────────────────────────────────────── -->
+        <tr>
+          <td style="padding:28px 36px 0;">
+            <p style="margin:0 0 10px;font-size:15px;font-weight:700;color:#1a2e1c;">
+              Hola {{ ((customer.name ?? '') ~ ' ' ~ (customer.lastName ?? ''))|trim ?: 'cliente' }},
+            </p>
+            <p style="margin:0;font-size:14px;color:#4a5e4c;line-height:1.7;">
+              Hemos revisado tu solicitud de pedido y ya tienes disponible el presupuesto final. Para confirmar el pedido, realiza la transferencia bancaria usando los datos indicados a continuación.
+            </p>
+          </td>
+        </tr>
+
+        <!-- ── Order + Customer data ──────────────────────────────────────── -->
+        <tr>
+          <td style="padding:24px 36px 0;">
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+              <tr>
+
+                <!-- Order data -->
+                <td width="46%" valign="top" style="padding-right:10px;">
+                  <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#7a7060;margin-bottom:10px;">Datos del pedido</div>
+                  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0"
+                         style="background-color:#f8f6f2;border:1px solid #e6e0d4;border-radius:10px;overflow:hidden;">
+                    <tr>
+                      <td style="padding:11px 16px;font-size:12px;font-weight:700;color:#567f0b;border-bottom:1px solid #e6e0d4;white-space:nowrap;">Nº Pedido</td>
+                      <td style="padding:11px 16px;font-size:13px;font-weight:700;color:#1a2e1c;border-bottom:1px solid #e6e0d4;">#{{ order.id }}</td>
+                    </tr>
+                    <tr>
+                      <td style="padding:11px 16px;font-size:12px;font-weight:700;color:#567f0b;border-bottom:1px solid #e6e0d4;white-space:nowrap;">Fecha</td>
+                      <td style="padding:11px 16px;font-size:13px;color:#1a2e1c;border-bottom:1px solid #e6e0d4;">{{ order.createdAt|date('d/m/Y') }}</td>
+                    </tr>
+                    <tr>
+                      <td style="padding:11px 16px;font-size:12px;font-weight:700;color:#567f0b;white-space:nowrap;">Estado</td>
+                      <td style="padding:11px 16px;">
+                        <span style="display:inline-block;background-color:#eef4e3;color:#3d5a08;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;border:1px solid #c8e6a0;">
+                          Presupuesto enviado
+                        </span>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+
+                <!-- Customer data -->
+                <td width="54%" valign="top" style="padding-left:10px;">
+                  <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#7a7060;margin-bottom:10px;">Tus datos</div>
+                  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0"
+                         style="background-color:#f8f6f2;border:1px solid #e6e0d4;border-radius:10px;overflow:hidden;">
+                    <tr>
+                      <td style="padding:11px 16px;font-size:12px;font-weight:700;color:#567f0b;border-bottom:1px solid #e6e0d4;white-space:nowrap;">Nombre</td>
+                      <td style="padding:11px 16px;font-size:13px;font-weight:700;color:#1a2e1c;border-bottom:1px solid #e6e0d4;">{{ ((customer.name ?? '') ~ ' ' ~ (customer.lastName ?? ''))|trim ?: 'N/D' }}</td>
+                    </tr>
+                    <tr>
+                      <td style="padding:11px 16px;font-size:12px;font-weight:700;color:#567f0b;border-bottom:1px solid #e6e0d4;white-space:nowrap;">Email</td>
+                      <td style="padding:11px 16px;font-size:13px;border-bottom:1px solid #e6e0d4;word-break:break-all;">{{ customer.email ?: 'N/D' }}</td>
+                    </tr>
+                    <tr>
+                      <td style="padding:11px 16px;font-size:12px;font-weight:700;color:#567f0b;border-bottom:1px solid #e6e0d4;white-space:nowrap;">Teléfono</td>
+                      <td style="padding:11px 16px;font-size:13px;border-bottom:1px solid #e6e0d4;">{{ customer.phone ?: 'N/D' }}</td>
+                    </tr>
+                    <tr>
+                      <td style="padding:11px 16px;font-size:12px;font-weight:700;color:#567f0b;white-space:nowrap;vertical-align:top;">Dirección</td>
+                      <td style="padding:11px 16px;font-size:13px;color:#1a2e1c;line-height:1.5;">{{ order.deliveryAddressSnapshot ?: 'N/D' }}</td>
+                    </tr>
+                  </table>
+                </td>
+
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- ── Products table ─────────────────────────────────────────────── -->
+        <tr>
+          <td style="padding:28px 36px 0;">
+            <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#1a2e1c;margin-bottom:14px;">
+              Detalle del presupuesto
+            </div>
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0"
+                   style="border-collapse:collapse;border:1px solid #e6e0d4;border-radius:10px;overflow:hidden;">
+              <thead>
+                <tr style="background-color:#eef4e3;">
+                  <th align="left"   style="padding:11px 14px;font-size:11px;font-weight:700;color:#3d5a08;text-transform:uppercase;letter-spacing:0.5px;border-bottom:1px solid #dde8cc;">Producto</th>
+                  <th align="left"   style="padding:11px 14px;font-size:11px;font-weight:700;color:#3d5a08;text-transform:uppercase;letter-spacing:0.5px;border-bottom:1px solid #dde8cc;">Variedad / Formato</th>
+                  <th align="center" style="padding:11px 14px;font-size:11px;font-weight:700;color:#3d5a08;text-transform:uppercase;letter-spacing:0.5px;border-bottom:1px solid #dde8cc;">Cant.</th>
+                  <th align="right"  style="padding:11px 14px;font-size:11px;font-weight:700;color:#3d5a08;text-transform:uppercase;letter-spacing:0.5px;border-bottom:1px solid #dde8cc;">P. Unit.</th>
+                  <th align="right"  style="padding:11px 14px;font-size:11px;font-weight:700;color:#3d5a08;text-transform:uppercase;letter-spacing:0.5px;border-bottom:1px solid #dde8cc;">Subtotal</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for item in items %}
+                {% set rowBg = loop.index is odd ? '#ffffff' : '#faf8f4' %}
+                <tr style="background-color:{{ rowBg }};">
+                  <td style="padding:12px 14px;font-size:14px;font-weight:700;color:#1a2e1c;border-bottom:1px solid #ede8df;">{{ item.product }}</td>
+                  <td style="padding:12px 14px;font-size:12px;color:#4a5e4c;border-bottom:1px solid #ede8df;line-height:1.6;">
+                    {%- set hasDetails = false -%}
+                    {% if item.caliber is defined and item.caliber and item.caliber != '-' %}
+                      <span style="display:block;">Cal: {{ item.caliber }}</span>
+                      {%- set hasDetails = true -%}
+                    {% endif %}
+                    {% if item.quality is defined and item.quality and item.quality != '-' %}
+                      <span style="display:block;">{{ item.quality }}</span>
+                      {%- set hasDetails = true -%}
+                    {% endif %}
+                    {% if item.format is defined and item.format and item.format != '-' %}
+                      <span style="display:block;">{{ item.format }}</span>
+                      {%- set hasDetails = true -%}
+                    {% endif %}
+                    {% if not hasDetails %}—{% endif %}
+                  </td>
+                  <td align="center" style="padding:12px 14px;border-bottom:1px solid #ede8df;">
+                    <span style="display:inline-block;background-color:#567f0b;color:#ffffff;font-size:13px;font-weight:700;padding:3px 11px;border-radius:20px;min-width:28px;text-align:center;">
+                      {{ item.quantity }}
+                    </span>
+                  </td>
+                  <td align="right" style="padding:12px 14px;font-size:13px;color:#1a2e1c;border-bottom:1px solid #ede8df;white-space:nowrap;">
+                    {{ item.unitPrice|number_format(2, ',', '.') }} €
+                  </td>
+                  <td align="right" style="padding:12px 14px;font-size:13px;font-weight:700;color:#1a2e1c;border-bottom:1px solid #ede8df;white-space:nowrap;">
+                    {{ item.lineTotal|number_format(2, ',', '.') }} €
+                  </td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </td>
+        </tr>
+
+        <!-- ── Totals summary ─────────────────────────────────────────────── -->
+        <tr>
+          <td style="padding:20px 36px 0;">
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+              <tr>
+                <td align="right">
+                  <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="min-width:280px;">
+                    <tr>
+                      <td style="padding:7px 0;font-size:13px;color:#7a7060;">Subtotal productos</td>
+                      <td align="right" style="padding:7px 0 7px 28px;font-size:13px;color:#1a2e1c;font-weight:600;white-space:nowrap;">
+                        {{ productsSubtotal|number_format(2, ',', '.') }} €
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="padding:7px 0;font-size:13px;color:#7a7060;">Gastos de envío</td>
+                      <td align="right" style="padding:7px 0 7px 28px;font-size:13px;color:#1a2e1c;font-weight:600;white-space:nowrap;">
+                        {{ shippingPrice|number_format(2, ',', '.') }} €
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="2" style="padding:6px 0;">
+                        <div style="border-top:2px solid #80ba1b;"></div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="padding:8px 0 0;font-size:16px;font-weight:700;color:#1a2e1c;">TOTAL</td>
+                      <td align="right" style="padding:8px 0 0 28px;font-size:22px;font-weight:700;color:#80ba1b;white-space:nowrap;">
+                        {{ totalPrice|number_format(2, ',', '.') }} €
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- ── Bank transfer block ────────────────────────────────────────── -->
+        <tr>
+          <td style="padding:28px 36px 0;">
+            <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#1a2e1c;margin-bottom:14px;">
+              Datos para realizar la transferencia
+            </div>
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0"
+                   style="background-color:#f8f6f2;border:1px solid #e6e0d4;border-radius:10px;overflow:hidden;">
+              <tr>
+                <td style="padding:13px 18px;font-size:12px;font-weight:700;color:#567f0b;border-bottom:1px solid #e6e0d4;white-space:nowrap;width:36%;">Titular</td>
+                <td style="padding:13px 18px;font-size:13px;font-weight:700;color:#1a2e1c;border-bottom:1px solid #e6e0d4;">Citribio</td>
+              </tr>
+              <tr>
+                <td style="padding:13px 18px;font-size:12px;font-weight:700;color:#567f0b;border-bottom:1px solid #e6e0d4;white-space:nowrap;">IBAN</td>
+                <td style="padding:13px 18px;font-size:13px;font-weight:700;color:#1a2e1c;border-bottom:1px solid #e6e0d4;letter-spacing:0.5px;">{{ bankIban }}</td>
+              </tr>
+              <tr>
+                <td style="padding:13px 18px;font-size:12px;font-weight:700;color:#567f0b;border-bottom:1px solid #e6e0d4;white-space:nowrap;">Importe</td>
+                <td style="padding:13px 18px;font-size:15px;font-weight:700;color:#80ba1b;border-bottom:1px solid #e6e0d4;">{{ totalPrice|number_format(2, ',', '.') }} €</td>
+              </tr>
+              <tr>
+                <td style="padding:13px 18px;font-size:12px;font-weight:700;color:#567f0b;white-space:nowrap;vertical-align:top;">Concepto</td>
+                <td style="padding:13px 18px;font-size:13px;font-weight:700;color:#ff731d;letter-spacing:0.2px;">{{ transferReference }}</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- ── Transfer concept warning ───────────────────────────────────── -->
+        <tr>
+          <td style="padding:16px 36px 0;">
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+              <tr>
+                <td style="background-color:#fff8f0;border-left:4px solid #ff731d;border-radius:0 10px 10px 0;padding:14px 18px;">
+                  <p style="margin:0;font-size:13px;color:#7a3a0a;line-height:1.65;">
+                    <strong>⚠ Importante:</strong> Es muy importante que indiques exactamente este concepto para que podamos identificar tu pago correctamente.
+                  </p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- ── Payment confirmation button ────────────────────────────────── -->
+        {% if paymentUrl is defined and paymentUrl %}
+        <tr>
+          <td style="padding:28px 36px 0;">
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+              <tr>
+                <td style="background-color:#f0f7e6;border:1px solid #c8e6a0;border-radius:12px;padding:22px 24px;">
+                  <p style="margin:0 0 6px;font-size:14px;font-weight:700;color:#1a2e1c;">¿Ya has realizado la transferencia?</p>
+                  <p style="margin:0 0 18px;font-size:13px;color:#4a5e4c;line-height:1.6;">
+                    Una vez completado el pago, pulsa el botón para notificarnos. No es necesario iniciar sesión.
+                  </p>
+                  <table role="presentation" cellspacing="0" cellpadding="0" border="0">
+                    <tr>
+                      <td align="center" style="border-radius:8px;background-color:#80ba1b;">
+                        <a href="{{ paymentUrl }}"
+                           target="_blank"
+                           style="display:inline-block;padding:14px 32px;font-size:15px;font-weight:700;color:#ffffff;text-decoration:none;border-radius:8px;letter-spacing:0.3px;background-color:#80ba1b;">
+                          ✓ Pago realizado
+                        </a>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        {% endif %}
+
+        <!-- ── Footer ─────────────────────────────────────────────────────── -->
+        <tr>
+          <td style="padding:32px 36px 36px;">
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+              <tr>
+                <td style="border-top:1px solid #e6e0d4;padding-top:22px;text-align:center;">
+                  <p style="margin:0 0 4px;font-size:13px;font-weight:700;color:#567f0b;">Citribio — Gestión de pedidos</p>
+                  <p style="margin:0;font-size:11px;color:#a09880;line-height:1.6;">
+                    Este presupuesto ha sido generado automáticamente. Si tienes alguna duda, contáctanos en
+                    <a href="mailto:administracion@citribio.com" style="color:#567f0b;text-decoration:none;">administracion@citribio.com</a>
+                  </p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+      </table>
+      <!-- /email card -->
+
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>

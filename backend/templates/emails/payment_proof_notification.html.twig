@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Justificante recibido — Pedido #{{ order.id }}</title>
+</head>
+<body style="margin:0;padding:0;background-color:#f5f3ee;font-family:Arial,Helvetica,sans-serif;color:#1a2e1c;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
+
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color:#f5f3ee;">
+  <tr>
+    <td align="center" style="padding:36px 12px;">
+
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0"
+             style="max-width:660px;margin:0 auto;background-color:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 2px 16px rgba(0,0,0,0.09);">
+
+        <!-- ── Header ─────────────────────────────────────────────────────── -->
+        <tr>
+          <td align="center" style="background-color:#567f0b;padding:28px 36px 24px;">
+            {% if logoUrl is defined and logoUrl %}
+              <img src="{{ logoUrl }}" alt="Citribio" style="display:block;margin:0 auto 16px;height:56px;width:auto;max-width:180px;" />
+            {% else %}
+              <div style="font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.65);margin-bottom:12px;">CITRIBIO</div>
+            {% endif %}
+            <h1 style="margin:0 0 8px;font-size:22px;font-weight:700;color:#ffffff;line-height:1.2;">
+              Justificante de pago recibido
+            </h1>
+            <p style="margin:0;font-size:14px;color:rgba(255,255,255,0.88);">
+              Pedido <strong style="color:#ffffff;">#{{ order.id }}</strong>
+            </p>
+          </td>
+        </tr>
+
+        <!-- ── Alert banner ───────────────────────────────────────────────── -->
+        <tr>
+          <td style="padding:20px 36px 0;">
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+              <tr>
+                <td style="background-color:#fff8f0;border-left:4px solid #ff731d;border-radius:0 10px 10px 0;padding:14px 18px;">
+                  <p style="margin:0;font-size:14px;color:#7a3a0a;line-height:1.65;">
+                    El cliente ha indicado que ya ha realizado el pago del pedido <strong>#{{ order.id }}</strong> y ha subido el justificante de transferencia. Revisa el justificante, confirma que el pago es correcto y cambia el estado del pedido a <strong>Pago recibido</strong> antes de preparar el envío.
+                  </p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- ── Customer data ──────────────────────────────────────────────── -->
+        <tr>
+          <td style="padding:24px 36px 0;">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#7a7060;margin-bottom:10px;">Datos del cliente</div>
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0"
+                   style="background-color:#f8f6f2;border:1px solid #e6e0d4;border-radius:10px;overflow:hidden;">
+              <tr>
+                <td style="padding:10px 16px;font-size:12px;font-weight:700;color:#567f0b;border-bottom:1px solid #e6e0d4;white-space:nowrap;width:30%;">Nombre</td>
+                <td style="padding:10px 16px;font-size:13px;font-weight:700;color:#1a2e1c;border-bottom:1px solid #e6e0d4;">{{ customerName ?: 'N/D' }}</td>
+              </tr>
+              <tr>
+                <td style="padding:10px 16px;font-size:12px;font-weight:700;color:#567f0b;border-bottom:1px solid #e6e0d4;white-space:nowrap;">Email</td>
+                <td style="padding:10px 16px;font-size:13px;border-bottom:1px solid #e6e0d4;word-break:break-all;">{{ customer.email ?: 'N/D' }}</td>
+              </tr>
+              <tr>
+                <td style="padding:10px 16px;font-size:12px;font-weight:700;color:#567f0b;border-bottom:1px solid #e6e0d4;white-space:nowrap;">Teléfono</td>
+                <td style="padding:10px 16px;font-size:13px;border-bottom:1px solid #e6e0d4;">{{ customer.phone ?: 'N/D' }}</td>
+              </tr>
+              <tr>
+                <td style="padding:10px 16px;font-size:12px;font-weight:700;color:#567f0b;white-space:nowrap;vertical-align:top;">Dirección</td>
+                <td style="padding:10px 16px;font-size:13px;color:#1a2e1c;line-height:1.5;">{{ order.deliveryAddressSnapshot ?: 'N/D' }}</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- ── Products table ─────────────────────────────────────────────── -->
+        <tr>
+          <td style="padding:24px 36px 0;">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#7a7060;margin-bottom:10px;">Productos del pedido</div>
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0"
+                   style="border-collapse:collapse;border:1px solid #e6e0d4;border-radius:10px;overflow:hidden;">
+              <thead>
+                <tr style="background-color:#eef4e3;">
+                  <th align="left"   style="padding:10px 12px;font-size:11px;font-weight:700;color:#3d5a08;text-transform:uppercase;border-bottom:1px solid #dde8cc;">Producto</th>
+                  <th align="left"   style="padding:10px 12px;font-size:11px;font-weight:700;color:#3d5a08;text-transform:uppercase;border-bottom:1px solid #dde8cc;">Variedad</th>
+                  <th align="center" style="padding:10px 12px;font-size:11px;font-weight:700;color:#3d5a08;text-transform:uppercase;border-bottom:1px solid #dde8cc;">Cant.</th>
+                  <th align="right"  style="padding:10px 12px;font-size:11px;font-weight:700;color:#3d5a08;text-transform:uppercase;border-bottom:1px solid #dde8cc;">P. Unit.</th>
+                  <th align="right"  style="padding:10px 12px;font-size:11px;font-weight:700;color:#3d5a08;text-transform:uppercase;border-bottom:1px solid #dde8cc;">Subtotal</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for item in items %}
+                <tr style="background-color:{{ loop.index is odd ? '#ffffff' : '#faf8f4' }};">
+                  <td style="padding:10px 12px;font-size:13px;font-weight:700;color:#1a2e1c;border-bottom:1px solid #ede8df;">{{ item.product }}</td>
+                  <td style="padding:10px 12px;font-size:12px;color:#4a5e4c;border-bottom:1px solid #ede8df;line-height:1.5;">
+                    {% if item.caliber != '-' %}<span style="display:block;">Cal: {{ item.caliber }}</span>{% endif %}
+                    {% if item.quality != '-' %}<span style="display:block;">{{ item.quality }}</span>{% endif %}
+                    {% if item.format != '-' %}<span style="display:block;">{{ item.format }}</span>{% endif %}
+                    {% if item.caliber == '-' and item.quality == '-' and item.format == '-' %}—{% endif %}
+                  </td>
+                  <td align="center" style="padding:10px 12px;border-bottom:1px solid #ede8df;">
+                    <span style="display:inline-block;background-color:#567f0b;color:#fff;font-size:12px;font-weight:700;padding:2px 10px;border-radius:20px;">{{ item.quantity }}</span>
+                  </td>
+                  <td align="right" style="padding:10px 12px;font-size:13px;color:#1a2e1c;border-bottom:1px solid #ede8df;white-space:nowrap;">
+                    {{ item.unitPrice is not null ? item.unitPrice|number_format(2, ',', '.') ~ ' €' : '—' }}
+                  </td>
+                  <td align="right" style="padding:10px 12px;font-size:13px;font-weight:700;color:#1a2e1c;border-bottom:1px solid #ede8df;white-space:nowrap;">
+                    {{ item.lineTotal is not null ? item.lineTotal|number_format(2, ',', '.') ~ ' €' : '—' }}
+                  </td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </td>
+        </tr>
+
+        <!-- ── Totals ─────────────────────────────────────────────────────── -->
+        <tr>
+          <td style="padding:16px 36px 0;">
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+              <tr>
+                <td align="right">
+                  <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="min-width:260px;">
+                    <tr>
+                      <td style="padding:6px 0;font-size:13px;color:#7a7060;">Subtotal productos</td>
+                      <td align="right" style="padding:6px 0 6px 24px;font-size:13px;font-weight:600;color:#1a2e1c;white-space:nowrap;">
+                        {{ productsSubtotal is not null ? productsSubtotal|number_format(2, ',', '.') ~ ' €' : '—' }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="padding:6px 0;font-size:13px;color:#7a7060;">Gastos de envío</td>
+                      <td align="right" style="padding:6px 0 6px 24px;font-size:13px;font-weight:600;color:#1a2e1c;white-space:nowrap;">
+                        {{ shippingPrice is not null ? shippingPrice|number_format(2, ',', '.') ~ ' €' : '—' }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="2" style="padding:4px 0;"><div style="border-top:2px solid #80ba1b;"></div></td>
+                    </tr>
+                    <tr>
+                      <td style="padding:6px 0 0;font-size:15px;font-weight:700;color:#1a2e1c;">TOTAL</td>
+                      <td align="right" style="padding:6px 0 0 24px;font-size:18px;font-weight:700;color:#80ba1b;white-space:nowrap;">
+                        {{ totalPrice is not null ? totalPrice|number_format(2, ',', '.') ~ ' €' : '—' }}
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- ── Transfer reference ─────────────────────────────────────────── -->
+        <tr>
+          <td style="padding:16px 36px 0;">
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0"
+                   style="background-color:#f8f6f2;border:1px solid #e6e0d4;border-radius:10px;overflow:hidden;">
+              <tr>
+                <td style="padding:12px 16px;font-size:12px;font-weight:700;color:#567f0b;white-space:nowrap;width:30%;">Concepto</td>
+                <td style="padding:12px 16px;font-size:13px;font-weight:700;color:#ff731d;">{{ transferReference }}</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- ── Proof file info ────────────────────────────────────────────── -->
+        {% if proofFilename is defined and proofFilename %}
+        <tr>
+          <td style="padding:16px 36px 0;">
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+              <tr>
+                <td style="background-color:#eef4e3;border:1px solid #c8e6a0;border-radius:10px;padding:14px 18px;">
+                  <p style="margin:0;font-size:13px;color:#3d5a08;line-height:1.6;">
+                    <strong>📎 Justificante adjunto:</strong> {{ proofFilename }}
+                  </p>
+                  <p style="margin:6px 0 0;font-size:12px;color:#4a5e4c;">
+                    El archivo ha sido guardado en el servidor. Puedes descargarlo desde el panel de administración.
+                  </p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        {% endif %}
+
+        <!-- ── CTA button ─────────────────────────────────────────────────── -->
+        <tr>
+          <td style="padding:28px 36px 0;" align="center">
+            <table role="presentation" cellspacing="0" cellpadding="0" border="0">
+              <tr>
+                <td align="center" style="border-radius:8px;background-color:#567f0b;">
+                  <a href="{{ reviewUrl }}"
+                     target="_blank"
+                     style="display:inline-block;padding:14px 36px;font-size:15px;font-weight:700;color:#ffffff;text-decoration:none;border-radius:8px;background-color:#567f0b;letter-spacing:0.3px;">
+                    Revisar pedido #{{ order.id }}
+                  </a>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- ── Footer ─────────────────────────────────────────────────────── -->
+        <tr>
+          <td style="padding:28px 36px 36px;">
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+              <tr>
+                <td style="border-top:1px solid #e6e0d4;padding-top:20px;text-align:center;">
+                  <p style="margin:0 0 4px;font-size:13px;font-weight:700;color:#567f0b;">Citribio — Panel de administración</p>
+                  <p style="margin:0;font-size:11px;color:#a09880;line-height:1.6;">
+                    Notificación automática del sistema. No respondas a este email.
+                  </p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>

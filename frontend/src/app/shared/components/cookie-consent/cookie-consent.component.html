@@ -1,0 +1,205 @@
+@if (choice() === null) {
+
+  <!-- ── Backdrop (mobile only) ─────────────────────────────────────────── -->
+  <div
+    class="fixed inset-0 z-40 bg-black/30 sm:hidden"
+    aria-hidden="true"
+  ></div>
+
+  <!-- ── Banner card ────────────────────────────────────────────────────── -->
+  <!--
+    Mobile  : centered card with mx-4 margins, anchored near bottom
+    Desktop : fixed bottom-right card, max-w-sm
+  -->
+  <div
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="cookie-banner-title"
+    class="
+      fixed z-50
+      bottom-4 left-4 right-4
+      sm:left-auto sm:right-5 sm:bottom-5 sm:w-full sm:max-w-sm
+      bg-white rounded-2xl shadow-2xl border border-citri-gray-200
+      flex flex-col
+    "
+  >
+
+    @if (!showPrefs()) {
+
+      <!-- ── Main consent view ─────────────────────────────────────────── -->
+      <div class="p-5">
+
+        <!-- Header row -->
+        <div class="flex items-start justify-between gap-3 mb-3">
+          <h2
+            id="cookie-banner-title"
+            class="font-citri-sans font-bold text-citri-gray-900 text-base leading-snug"
+          >
+            Gestionar consentimiento
+          </h2>
+          <button
+            type="button"
+            (click)="deny()"
+            aria-label="Cerrar y denegar cookies"
+            class="shrink-0 text-citri-gray-400 hover:text-citri-gray-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-citri-green rounded"
+          >
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Body text -->
+        <p class="text-xs text-citri-gray-600 leading-relaxed mb-4">
+          Para ofrecer las mejores experiencias, utilizamos tecnologías como las cookies para almacenar y/o acceder a la información del dispositivo. El consentimiento de estas tecnologías nos permitirá procesar datos como el comportamiento de navegación o identificaciones únicas en este sitio. No consentir o retirar el consentimiento puede afectar negativamente a ciertas características y funciones.
+        </p>
+
+        <!-- Action buttons -->
+        <div class="flex flex-col gap-2">
+          <button
+            type="button"
+            (click)="accept()"
+            class="w-full rounded-lg bg-citri-green px-4 py-2.5 text-sm font-semibold text-white hover:bg-citri-green-dark transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-citri-green focus-visible:ring-offset-1"
+          >
+            Aceptar
+          </button>
+          <button
+            type="button"
+            (click)="deny()"
+            class="w-full rounded-lg border border-citri-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-citri-gray-700 hover:bg-citri-gray-50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-citri-green focus-visible:ring-offset-1"
+          >
+            Denegar
+          </button>
+          <button
+            type="button"
+            (click)="openPrefs()"
+            class="w-full rounded-lg border border-citri-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-citri-gray-600 hover:bg-citri-gray-50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-citri-green focus-visible:ring-offset-1"
+          >
+            Ver preferencias
+          </button>
+        </div>
+
+        <!-- Footer links -->
+        <div class="mt-3 flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
+          <a
+            routerLink="/politica-cookies"
+            class="text-[11px] text-citri-gray-500 hover:text-citri-green underline underline-offset-2 transition-colors"
+          >
+            Política de cookies
+          </a>
+          <span class="text-citri-gray-300 text-[11px]" aria-hidden="true">·</span>
+          <a
+            routerLink="/politica-de-privacidad"
+            class="text-[11px] text-citri-gray-500 hover:text-citri-green underline underline-offset-2 transition-colors"
+          >
+            Política de privacidad
+          </a>
+        </div>
+
+      </div>
+
+    } @else {
+
+      <!-- ── Preferences panel ─────────────────────────────────────────── -->
+      <div class="p-5">
+
+        <!-- Header row -->
+        <div class="flex items-center justify-between gap-3 mb-4">
+          <h2
+            id="cookie-banner-title"
+            class="font-citri-sans font-bold text-citri-gray-900 text-base"
+          >
+            Preferencias de cookies
+          </h2>
+          <button
+            type="button"
+            (click)="closePrefs()"
+            aria-label="Volver al banner de cookies"
+            class="shrink-0 text-citri-gray-400 hover:text-citri-gray-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-citri-green rounded"
+          >
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Category rows -->
+        <div class="space-y-3 mb-5">
+
+          <!-- Técnicas (always on) -->
+          <div class="flex items-start justify-between gap-3 rounded-lg bg-citri-gray-50 border border-citri-gray-200 px-4 py-3">
+            <div>
+              <p class="text-sm font-semibold text-citri-gray-900">Técnicas / necesarias</p>
+              <p class="text-xs text-citri-gray-500 mt-0.5 leading-snug">Imprescindibles para el funcionamiento del sitio. No pueden desactivarse.</p>
+            </div>
+            <span class="shrink-0 mt-0.5 text-xs font-semibold text-citri-green bg-citri-green-light px-2 py-0.5 rounded-full whitespace-nowrap">
+              Siempre activas
+            </span>
+          </div>
+
+          <!-- Analíticas -->
+          <div class="flex items-start justify-between gap-3 rounded-lg bg-citri-gray-50 border border-citri-gray-200 px-4 py-3">
+            <div>
+              <p class="text-sm font-semibold text-citri-gray-900">Analíticas</p>
+              <p class="text-xs text-citri-gray-500 mt-0.5 leading-snug">Nos ayudan a entender cómo se usa el sitio para mejorar la experiencia.</p>
+            </div>
+            <button
+              type="button"
+              role="switch"
+              [attr.aria-checked]="analytics()"
+              (click)="analytics.set(!analytics())"
+              class="shrink-0 mt-0.5 relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-citri-green focus-visible:ring-offset-1"
+              [class.bg-citri-green]="analytics()"
+              [class.bg-citri-gray-300]="!analytics()"
+              aria-label="Activar cookies analíticas"
+            >
+              <span
+                class="inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow transition-transform"
+                [class.translate-x-4]="analytics()"
+                [class.translate-x-1]="!analytics()"
+              ></span>
+            </button>
+          </div>
+
+          <!-- Marketing -->
+          <div class="flex items-start justify-between gap-3 rounded-lg bg-citri-gray-50 border border-citri-gray-200 px-4 py-3">
+            <div>
+              <p class="text-sm font-semibold text-citri-gray-900">Marketing</p>
+              <p class="text-xs text-citri-gray-500 mt-0.5 leading-snug">Permiten mostrar publicidad relevante según sus intereses.</p>
+            </div>
+            <button
+              type="button"
+              role="switch"
+              [attr.aria-checked]="marketing()"
+              (click)="marketing.set(!marketing())"
+              class="shrink-0 mt-0.5 relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-citri-green focus-visible:ring-offset-1"
+              [class.bg-citri-green]="marketing()"
+              [class.bg-citri-gray-300]="!marketing()"
+              aria-label="Activar cookies de marketing"
+            >
+              <span
+                class="inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow transition-transform"
+                [class.translate-x-4]="marketing()"
+                [class.translate-x-1]="!marketing()"
+              ></span>
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Save button -->
+        <button
+          type="button"
+          (click)="savePrefs()"
+          class="w-full rounded-lg bg-citri-green px-4 py-2.5 text-sm font-semibold text-white hover:bg-citri-green-dark transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-citri-green focus-visible:ring-offset-1"
+        >
+          Guardar preferencias
+        </button>
+
+      </div>
+
+    }
+
+  </div>
+
+}

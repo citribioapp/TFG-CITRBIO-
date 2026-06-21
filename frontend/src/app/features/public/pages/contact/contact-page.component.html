@@ -1,0 +1,251 @@
+<app-hero-banner
+  backgroundImage="/contacto.webp"
+  [overlayOpacity]="0.45"
+  title="CONTACTO"
+  subtitle="Estamos aquí para ayudarte"
+  titleSize="medium"
+  heroSize="half"
+  [overlayOpacity]="0.5"
+/>
+
+<!-- Intro editorial -->
+<section class="py-12 md:py-14 bg-white">
+  <div class="max-w-7xl mx-auto px-4">
+    <p class="text-citri-green text-sm font-semibold uppercase tracking-wide mb-2">Hablemos</p>
+    <h2 class="font-citri-sans font-bold text-citri-gray-900 text-3xl md:text-4xl mb-3">
+      Ponte en contacto con nosotros
+    </h2>
+    <p class="text-citri-gray-600 text-base md:text-lg font-medium leading-snug max-w-2xl">
+      Puedes escribirnos, llamarnos o visitarnos. Estaremos encantados de atenderte.
+    </p>
+  </div>
+</section>
+
+<!-- Contacto + Formulario -->
+<section class="pb-16 md:pb-24 bg-white">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:items-stretch">
+
+      <!-- Columna izquierda: datos de contacto -->
+      <div class="flex flex-col space-y-5">
+
+        <!-- Dirección -->
+        <div class="flex items-start gap-4 p-5 rounded-citri-lg border border-citri-gray-100 shadow-citri-card bg-white">
+          <div class="w-11 h-11 rounded-citri-md bg-citri-green-light flex items-center justify-center shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-citri-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 2C8.686 2 6 4.686 6 8c0 5.25 6 13 6 13s6-7.75 6-13c0-3.314-2.686-6-6-6zm0 8a2 2 0 110-4 2 2 0 010 4z" />
+            </svg>
+          </div>
+          <div>
+            <p class="text-sm font-semibold text-citri-gray-900 mb-0.5">Dirección</p>
+            <p class="text-sm text-citri-gray-600">C. Asturias, 5, 30837 Alcantarilla, Murcia, España</p>
+          </div>
+        </div>
+
+        <!-- Teléfono -->
+        <div class="flex items-start gap-4 p-5 rounded-citri-lg border border-citri-gray-100 shadow-citri-card bg-white">
+          <div class="w-11 h-11 rounded-citri-md bg-citri-green-light flex items-center justify-center shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-citri-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h2.28a1 1 0 01.95.684l1.2 3.6a1 1 0 01-.23 1.05L7.5 9.62a16.05 16.05 0 006.88 6.88l1.286-1.7a1 1 0 011.05-.23l3.6 1.2A1 1 0 0121 16.72V19a2 2 0 01-2 2h-1C9.163 21 3 14.837 3 7V5z" />
+            </svg>
+          </div>
+          <div>
+            <p class="text-sm font-semibold text-citri-gray-900 mb-0.5">Teléfono</p>
+            <p class="text-sm text-citri-gray-600">+34 675 61 82 77</p>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="flex items-start gap-4 p-5 rounded-citri-lg border border-citri-gray-100 shadow-citri-card bg-white">
+          <div class="w-11 h-11 rounded-citri-md bg-citri-green-light flex items-center justify-center shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-citri-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+          </div>
+          <div class="min-w-0 flex-1">
+            <p class="text-sm font-semibold text-citri-gray-900 mb-0.5">Email</p>
+            <p class="text-sm text-citri-gray-600 break-words">administracion&#64;citribio.com</p>
+          </div>
+        </div>
+
+        <!-- Imagen -->
+        <img src="/LimonForma.png" alt="Finca Citribio"
+          class="rounded-citri-lg w-full flex-1 min-h-0 object-cover shadow-citri-card" />
+      </div>
+
+      <!-- Columna derecha: formulario en card -->
+      <div class="bg-citri-gray-50 rounded-citri-lg shadow-citri-card p-6 md:p-8 border border-citri-gray-100">
+        <p class="text-citri-green text-xs font-semibold uppercase tracking-wide mb-1">Formulario de contacto</p>
+        <h3 class="font-citri-sans font-bold text-citri-gray-900 text-xl mb-2">Envíanos un mensaje</h3>
+        <p class="text-citri-gray-600 text-sm mb-4">
+          Los campos con <span class="text-red-500 font-semibold">*</span> son obligatorios
+        </p>
+
+        <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-5">
+
+          <!-- Nombre -->
+          <div>
+            <label for="name" class="block text-sm font-medium text-citri-gray-900 mb-1">
+              Nombre <span class="text-red-500">*</span>
+            </label>
+            <input id="name" type="text" formControlName="name" aria-describedby="name-error" placeholder="Tu nombre"
+              class="w-full px-3 py-2.5 rounded-citri-sm border text-citri-gray-900 text-sm focus:outline-none focus:ring-2 transition-colors bg-white"
+              [ngClass]="isInvalid('name') ? 'border-red-500 focus:ring-red-300' : 'border-citri-gray-300 focus:border-citri-green focus:ring-citri-green/20'" />
+            @if (isInvalid('name')) {
+              <p id="name-error" class="text-red-600 text-sm mt-1">El nombre es obligatorio (mínimo 2 caracteres).</p>
+            }
+          </div>
+
+          <!-- Email -->
+          <div>
+            <label for="email" class="block text-sm font-medium text-citri-gray-900 mb-1">
+              Email <span class="text-red-500">*</span>
+            </label>
+            <input id="email" type="email" formControlName="email" aria-describedby="email-error" placeholder="tu@email.com"
+              autocomplete="email"
+              class="w-full px-3 py-2.5 rounded-citri-sm border text-citri-gray-900 text-sm focus:outline-none focus:ring-2 transition-colors bg-white"
+              [ngClass]="isInvalid('email') ? 'border-red-500 focus:ring-red-300' : 'border-citri-gray-300 focus:border-citri-green focus:ring-citri-green/20'" />
+            @if (isInvalid('email')) {
+              <p id="email-error" class="text-red-600 text-sm mt-1">Introduce un email válido.</p>
+            }
+          </div>
+
+          <!-- Tipo de cliente -->
+          <div>
+            <p id="client-type-label" class="block text-sm font-medium text-citri-gray-900 mb-2">
+              Tipo de cliente <span class="text-red-500">*</span>
+            </p>
+            <div class="flex flex-col gap-2" role="radiogroup" aria-labelledby="client-type-label">
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="radio" formControlName="clientType" value="particular" class="accent-citri-green" />
+                <span class="text-sm text-citri-gray-900">Particular</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="radio" formControlName="clientType" value="empresa" class="accent-citri-green" />
+                <span class="text-sm text-citri-gray-900">Empresa</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Teléfono -->
+          <div>
+            <label for="phone" class="block text-sm font-medium text-citri-gray-900 mb-1">
+              Teléfono <span class="text-red-500">*</span>
+            </label>
+            <div class="flex gap-2" role="group" aria-label="Número de teléfono con prefijo de país">
+              <!-- Country prefix selector -->
+              <app-phone-prefix-selector formControlName="phonePrefix" />
+              <!-- Phone number (digits only) -->
+              <input
+                id="phone"
+                type="text"
+                formControlName="phoneNumber"
+                placeholder="123456789"
+                maxlength="15"
+                inputmode="numeric"
+                aria-describedby="phone-error"
+                class="min-w-0 flex-1 px-3 py-2.5 rounded-citri-sm border text-citri-gray-900 text-sm focus:outline-none focus:ring-2 transition-colors bg-white"
+                [ngClass]="isInvalid('phoneNumber') ? 'border-red-500 focus:ring-red-300' : 'border-citri-gray-300 focus:border-citri-green focus:ring-citri-green/20'"
+                (input)="onPhoneInput($event)"
+              />
+            </div>
+            @if (isInvalid('phoneNumber')) {
+              <p id="phone-error" class="text-red-600 text-sm mt-1">Introduce un número de teléfono válido (6-15 dígitos).</p>
+            }
+          </div>
+
+          <!-- Mensaje -->
+          <div>
+            <label for="message" class="block text-sm font-medium text-citri-gray-900 mb-1">
+              Mensaje <span class="text-red-500">*</span>
+            </label>
+            <textarea id="message" formControlName="message" rows="4" aria-describedby="message-error" placeholder="Escribe tu mensaje aquí..."
+              class="w-full px-3 py-2.5 rounded-citri-sm border text-citri-gray-900 text-sm focus:outline-none focus:ring-2 transition-colors resize-none bg-white"
+              [ngClass]="isInvalid('message') ? 'border-red-500 focus:ring-red-300' : 'border-citri-gray-300 focus:border-citri-green focus:ring-citri-green/20'"></textarea>
+            @if (isInvalid('message')) {
+              <p id="message-error" class="text-red-600 text-sm mt-1">El mensaje es obligatorio (mínimo 10 caracteres).</p>
+            }
+          </div>
+
+          <!-- Privacidad -->
+          <div>
+            <label class="flex items-start gap-3 cursor-pointer">
+              <input type="checkbox" formControlName="privacy" class="mt-0.5 accent-citri-green shrink-0" />
+              <span class="text-sm text-citri-gray-600">
+                He leído y acepto la
+                <a routerLink="/politica-de-privacidad" class="font-bold text-citri-green underline underline-offset-2 hover:text-citri-green-dark">Política de privacidad</a><span class="text-red-500">*</span>
+              </span>
+            </label>
+            @if (isInvalid('privacy')) {
+              <p class="text-red-600 text-sm mt-1">Debes aceptar la política de privacidad.</p>
+            }
+          </div>
+
+          <!-- Mensajes de estado -->
+          @if (successMessage()) {
+            <div class="rounded-citri-md bg-citri-green-light border border-citri-green p-4">
+              <p class="text-citri-green font-medium text-sm">{{ successMessage() }}</p>
+            </div>
+          }
+          @if (errorMessage()) {
+            <div class="rounded-citri-md bg-red-50 border border-red-200 p-4">
+              <p class="text-red-700 text-sm">{{ errorMessage() }}</p>
+            </div>
+          }
+
+          <!-- Botón enviar -->
+          <button type="submit" [disabled]="isSubmitting()"
+            class="w-full px-6 py-3 bg-citri-green text-white font-semibold rounded-citri-md hover:bg-citri-green-dark transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+            {{ isSubmitting() ? 'Enviando...' : 'Enviar mensaje' }}
+          </button>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Sección mapa -->
+<section class="py-12 md:py-14 bg-citri-gray-50">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="grid grid-cols-1 gap-10 md:grid-cols-2 md:items-center">
+
+      <div>
+        <p class="text-citri-green text-sm font-semibold uppercase tracking-wide mb-2">Nuestra ubicación</p>
+        <h2 class="font-citri-sans font-bold text-citri-gray-900 text-2xl md:text-3xl mb-3">
+          ¿Dónde puedes encontrarnos?
+        </h2>
+        <p class="text-citri-gray-600 text-base md:text-lg font-medium leading-snug mb-5">
+          Estamos en Alcantarilla, Murcia, en el corazón del sureste mediterráneo. Puedes visitarnos o contactarnos para cualquier consulta sobre nuestros productos.
+        </p>
+        <a
+          href="https://maps.app.goo.gl/iWJCLNrXjy9dkSLL7"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 px-6 py-3 bg-citri-green text-white font-semibold rounded-citri-md hover:bg-citri-green-dark transition-colors duration-200 text-sm"
+        >
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+          </svg>
+          Cómo llegar
+        </a>
+      </div>
+
+      <div class="rounded-citri-lg overflow-hidden shadow-citri-card">
+        <iframe
+          src="https://maps.google.com/maps?q=C.+Asturias+5+Alcantarilla+Murcia+España&output=embed&z=16"
+          width="100%"
+          height="400"
+          style="border:0; display:block;"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="Ubicación de Citribio en Alcantarilla, Murcia"
+          class="w-full h-[300px] md:h-[420px]"
+        ></iframe>
+      </div>
+
+    </div>
+  </div>
+</section>

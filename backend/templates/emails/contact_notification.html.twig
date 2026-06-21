@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nuevo mensaje de contacto — Citribio</title>
+</head>
+<body style="margin:0;padding:0;background-color:#f5f3ee;font-family:Arial,Helvetica,sans-serif;color:#1a2e1c;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
+
+<!-- Outer wrapper -->
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color:#f5f3ee;">
+  <tr>
+    <td align="center" style="padding:32px 12px;">
+
+      <!-- Email card -->
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0"
+             style="max-width:640px;margin:0 auto;background-color:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 2px 16px rgba(0,0,0,0.09);">
+
+        <!-- ── Header ─────────────────────────────────────────────────── -->
+        <tr>
+          <td align="center" style="background-color:#567f0b;padding:32px 36px 28px;">
+            {% if logoUrl %}
+              <img src="{{ logoUrl }}" alt="Citribio" width="160" height="64"
+                   style="display:block;margin:0 auto 18px;height:64px;width:auto;max-width:200px;" />
+            {% else %}
+              <div style="font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.70);margin-bottom:14px;">CITRIBIO</div>
+            {% endif %}
+            <h1 style="margin:0 0 8px;font-size:24px;font-weight:700;color:#ffffff;line-height:1.2;">Nuevo mensaje de contacto</h1>
+            <p style="margin:0;font-size:14px;color:rgba(255,255,255,0.88);line-height:1.55;">Has recibido una nueva solicitud desde la web de Citribio.</p>
+          </td>
+        </tr>
+
+        <!-- ── Intro card ──────────────────────────────────────────────── -->
+        <tr>
+          <td style="padding:28px 36px 0;">
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+              <tr>
+                <td style="background-color:#f8f6f2;border:1px solid #e6e0d4;border-radius:10px;padding:18px 20px;">
+                  <p style="margin:0;font-size:14px;color:#4a5e4c;line-height:1.65;">
+                    Un usuario ha enviado un mensaje desde el formulario de contacto. Revisa sus datos y responde cuando sea posible.
+                  </p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- ── Contact data card ──────────────────────────────────────── -->
+        <tr>
+          <td style="padding:22px 36px 0;">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#7a7060;margin-bottom:12px;">Datos del contacto</div>
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0"
+                   style="background-color:#f8f6f2;border:1px solid #e6e0d4;border-radius:10px;overflow:hidden;">
+              <tr>
+                <td width="36%" style="padding:13px 18px;font-size:13px;font-weight:700;color:#567f0b;border-bottom:1px solid #e6e0d4;">Nombre</td>
+                <td style="padding:13px 18px;font-size:13px;font-weight:600;color:#1a2e1c;border-bottom:1px solid #e6e0d4;">{{ name|e }}</td>
+              </tr>
+              <tr>
+                <td width="36%" style="padding:13px 18px;font-size:13px;font-weight:700;color:#567f0b;border-bottom:1px solid #e6e0d4;">Email</td>
+                <td style="padding:13px 18px;font-size:13px;border-bottom:1px solid #e6e0d4;">
+                  <a href="mailto:{{ email|e }}" style="color:#567f0b;text-decoration:none;font-weight:600;">{{ email|e }}</a>
+                </td>
+              </tr>
+              <tr>
+                <td width="36%" style="padding:13px 18px;font-size:13px;font-weight:700;color:#567f0b;border-bottom:1px solid #e6e0d4;">Tipo de cliente</td>
+                <td style="padding:13px 18px;font-size:13px;color:#1a2e1c;border-bottom:1px solid #e6e0d4;">{{ clientType|e }}</td>
+              </tr>
+              <tr>
+                <td width="36%" style="padding:13px 18px;font-size:13px;font-weight:700;color:#567f0b;">Teléfono</td>
+                <td style="padding:13px 18px;font-size:13px;">
+                  <a href="tel:{{ phone|e }}" style="color:#567f0b;text-decoration:none;font-weight:600;">{{ phone|e }}</a>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- ── Message card ───────────────────────────────────────────── -->
+        <tr>
+          <td style="padding:22px 36px 0;">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#7a7060;margin-bottom:12px;">Mensaje</div>
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+              <tr>
+                <td style="background-color:#f0f9e0;border-left:4px solid #567f0b;border-radius:0 10px 10px 0;padding:18px 22px;">
+                  <p style="margin:0;font-size:14px;color:#2d4a06;line-height:1.75;">{{ message|e|nl2br }}</p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- ── Footer ─────────────────────────────────────────────────── -->
+        <tr>
+          <td style="padding:28px 36px 32px;">
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+              <tr>
+                <td style="border-top:1px solid #e6e0d4;padding-top:22px;">
+                  <p style="margin:0 0 4px;font-size:14px;font-weight:700;color:#567f0b;">Citribio</p>
+                  <p style="margin:0 0 4px;font-size:12px;color:#7a7060;">Cítricos de origen, calidad y sabor mediterráneo.</p>
+                  <p style="margin:0 0 2px;font-size:11px;color:#a09880;line-height:1.6;">
+                    <a href="mailto:{{ adminEmail }}" style="color:#a09880;text-decoration:none;">{{ adminEmail }}</a>
+                  </p>
+                  <p style="margin:0;font-size:11px;color:#a09880;line-height:1.6;">
+                    Este mensaje ha sido generado automáticamente desde el formulario de contacto.
+                  </p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+      </table>
+      <!-- /email card -->
+
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>

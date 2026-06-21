@@ -1,0 +1,1080 @@
+<div class="min-h-screen bg-citri-gray-50">
+
+  <!-- -- Toast notifications ----------------------------------------------- -->
+  @if (successMessage()) {
+    <div class="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-sm flex items-center gap-3 px-5 py-3 bg-citri-green text-white rounded-citri-md shadow-citri-card text-sm font-semibold animate-fade-in">
+      <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+      </svg>
+      <span class="min-w-0 break-words">{{ successMessage() }}</span>
+    </div>
+  }
+  @if (errorMessage()) {
+    <div class="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-sm flex items-center gap-3 px-5 py-3 bg-red-600 text-white rounded-citri-md shadow-citri-card text-sm font-semibold animate-fade-in">
+      <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+      </svg>
+      <span class="min-w-0 break-words">{{ errorMessage() }}</span>
+    </div>
+  }
+
+  <!-- -- Header ------------------------------------------------------------ -->
+  <div class="bg-citri-green">
+    <div class="max-w-7xl mx-auto px-4 py-8 md:py-10">
+      <p class="text-white/70 text-xs font-semibold uppercase tracking-wide mb-1">Administración</p>
+      <h1 class="font-citri-sans font-bold text-white text-2xl md:text-3xl">Administración de productos</h1>
+      <p class="text-white/80 text-sm mt-1">Gestiona productos, variedades, imágenes y características desde un único lugar.</p>
+    </div>
+  </div>
+
+  <!-- Back link -->
+  <div class="max-w-7xl mx-auto px-4 pt-6 pb-0">
+    <a routerLink="/admin"
+      class="inline-flex items-center gap-1.5 text-sm font-medium text-citri-gray-600 hover:text-citri-green transition-colors">
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+      </svg>
+      Panel admin
+    </a>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-4 py-8 md:py-10 space-y-6">
+
+    <!-- -- Workflow steps card -------------------------------------------- -->
+    <div class="bg-white rounded-citri-lg shadow-citri-card p-5 md:p-6 border-l-4 border-citri-green">
+      <p class="text-xs font-semibold uppercase tracking-wide text-citri-gray-600 mb-4">Flujo de trabajo</p>
+
+      <!-- Steps row with arrows -->
+      <div class="flex flex-wrap items-center gap-2">
+
+        <!-- Step 1: Producto -->
+        @let step1Active = !selectedCategoryId();
+        @let step1Done = !!selectedCategoryId();
+        <div class="flex items-center gap-2">
+          <div class="flex items-start gap-3 px-3 py-2.5 rounded-citri-md transition-colors"
+               [class.bg-citri-green]="step1Active"
+               [class.bg-citri-green-light]="step1Done"
+               [class.bg-citri-gray-50]="!step1Active && !step1Done">
+            <div class="w-7 h-7 rounded-full flex items-center justify-center shrink-0 text-xs font-bold transition-colors"
+                 [class.bg-white]="step1Active"
+                 [class.text-citri-green]="step1Active"
+                 [class.bg-citri-green]="step1Done"
+                 [class.text-white]="step1Done || (!step1Active && !step1Done)"
+                 [class.bg-citri-gray-300]="!step1Active && !step1Done">
+              @if (step1Done) {
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              } @else { 1 }
+            </div>
+            <div>
+              <p class="font-semibold text-sm leading-none mb-0.5"
+                 [class.text-white]="step1Active"
+                 [class.text-citri-green]="step1Done"
+                 [class.text-citri-gray-900]="!step1Active && !step1Done">Producto</p>
+              <p class="text-xs leading-snug"
+                 [class.text-white/80]="step1Active"
+                 [class.text-citri-green]="step1Done"
+                 [class.text-citri-gray-600]="!step1Active && !step1Done">Crea o selecciona un producto.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Arrow 1?2 -->
+        <svg class="w-4 h-4 shrink-0 text-citri-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/>
+        </svg>
+
+        <!-- Step 2: Variedad -->
+        @let step2Active = !!selectedCategoryId() && (createStep() === null || createStep() === 'data');
+        @let step2Done = !!selectedCategoryId() && createStep() !== null && createStep() !== 'data';
+        <div class="flex items-center gap-2">
+          <div class="flex items-start gap-3 px-3 py-2.5 rounded-citri-md transition-colors"
+               [class.bg-citri-green]="step2Active"
+               [class.bg-citri-green-light]="step2Done"
+               [class.bg-citri-gray-50]="!step2Active && !step2Done">
+            <div class="w-7 h-7 rounded-full flex items-center justify-center shrink-0 text-xs font-bold transition-colors"
+                 [class.bg-white]="step2Active"
+                 [class.text-citri-green]="step2Active"
+                 [class.bg-citri-green]="step2Done"
+                 [class.text-white]="step2Done || (!step2Active && !step2Done)"
+                 [class.bg-citri-gray-300]="!step2Active && !step2Done">
+              @if (step2Done) {
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              } @else { 2 }
+            </div>
+            <div>
+              <p class="font-semibold text-sm leading-none mb-0.5"
+                 [class.text-white]="step2Active"
+                 [class.text-citri-green]="step2Done"
+                 [class.text-citri-gray-900]="!step2Active && !step2Done">Variedad</p>
+              <p class="text-xs leading-snug"
+                 [class.text-white/80]="step2Active"
+                 [class.text-citri-green]="step2Done"
+                 [class.text-citri-gray-600]="!step2Active && !step2Done">Añade variedades al producto.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Arrow 2?3 -->
+        <svg class="w-4 h-4 shrink-0 text-citri-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/>
+        </svg>
+
+        <!-- Step 3: Imagen -->
+        @let step3Active = createStep() === 'image';
+        @let step3Done = createStep() === 'options';
+        <div class="flex items-center gap-2">
+          <div class="flex items-start gap-3 px-3 py-2.5 rounded-citri-md transition-colors"
+               [class.bg-citri-green]="step3Active"
+               [class.bg-citri-green-light]="step3Done"
+               [class.bg-citri-gray-50]="!step3Active && !step3Done">
+            <div class="w-7 h-7 rounded-full flex items-center justify-center shrink-0 text-xs font-bold transition-colors"
+                 [class.bg-white]="step3Active"
+                 [class.text-citri-green]="step3Active"
+                 [class.bg-citri-green]="step3Done"
+                 [class.text-white]="step3Done || (!step3Active && !step3Done)"
+                 [class.bg-citri-gray-300]="!step3Active && !step3Done">
+              @if (step3Done) {
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              } @else { 3 }
+            </div>
+            <div>
+              <p class="font-semibold text-sm leading-none mb-0.5"
+                 [class.text-white]="step3Active"
+                 [class.text-citri-green]="step3Done"
+                 [class.text-citri-gray-900]="!step3Active && !step3Done">Imagen</p>
+              <p class="text-xs leading-snug"
+                 [class.text-white/80]="step3Active"
+                 [class.text-citri-green]="step3Done"
+                 [class.text-citri-gray-600]="!step3Active && !step3Done">Sube la foto de la variedad.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Arrow 3?4 -->
+        <svg class="w-4 h-4 shrink-0 text-citri-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/>
+        </svg>
+
+        <!-- Step 4: Características -->
+        @let step4Active = createStep() === 'options';
+        <div class="flex items-start gap-3 px-3 py-2.5 rounded-citri-md transition-colors"
+             [class.bg-citri-green]="step4Active"
+             [class.bg-citri-gray-50]="!step4Active">
+          <div class="w-7 h-7 rounded-full flex items-center justify-center shrink-0 text-xs font-bold transition-colors"
+               [class.bg-white]="step4Active"
+               [class.text-citri-green]="step4Active"
+               [class.bg-citri-gray-300]="!step4Active"
+               [class.text-white]="!step4Active">4</div>
+          <div>
+            <p class="font-semibold text-sm leading-none mb-0.5"
+               [class.text-white]="step4Active"
+               [class.text-citri-gray-900]="!step4Active">Características</p>
+            <p class="text-xs leading-snug"
+               [class.text-white/80]="step4Active"
+               [class.text-citri-gray-600]="!step4Active">Define calibres, calidades y formatos.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- -- Section 1: Productos ----------------------------------------- -->
+    <div class="bg-white rounded-citri-lg shadow-citri-card p-5 md:p-6">
+      <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4">
+        <h2 class="font-citri-sans font-bold text-citri-gray-900 text-lg flex items-center gap-2">
+          <span class="w-6 h-6 rounded-full bg-citri-green text-white text-xs font-bold flex items-center justify-center shrink-0">1</span>
+          Productos
+        </h2>
+        <button
+          type="button"
+          (click)="showCategoryForm.set(!showCategoryForm())"
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-citri-green text-white text-sm font-semibold rounded-citri-md hover:bg-citri-green-dark transition-colors duration-150 self-start sm:self-auto"
+        >
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+          </svg>
+          Nuevo producto
+        </button>
+      </div>
+
+      <!-- Product selector cards -->
+      @if (isLoadingCategories()) {
+        <div class="flex items-center gap-2 text-citri-gray-600 text-sm py-2">
+          <svg class="w-4 h-4 animate-spin text-citri-green" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+          </svg>
+          Cargando categorías...
+        </div>
+      } @else if (categories().length === 0) {
+        <p class="text-citri-gray-600 text-sm py-2">No hay categorías. Crea la primera.</p>
+      } @else {
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 mb-2">
+          @for (cat of categories(); track cat.id) {
+            <div
+              class="group relative flex flex-col rounded-citri-md border overflow-hidden transition-all duration-150"
+              [ngClass]="{
+                'border-citri-green bg-citri-green shadow-sm': selectedCategoryId() === cat.id,
+                'border-citri-gray-300 bg-white hover:border-citri-green/60 hover:shadow-sm': selectedCategoryId() !== cat.id
+              }"
+            >
+              <!-- Selection button - fills the card -->
+              <button
+                type="button"
+                (click)="selectCategory(cat.id)"
+                class="flex-1 px-3 py-3 text-left text-sm font-semibold leading-snug transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-citri-green focus-visible:ring-inset"
+                [ngClass]="{
+                  'text-white': selectedCategoryId() === cat.id,
+                  'text-citri-gray-900': selectedCategoryId() !== cat.id
+                }"
+              >
+                {{ cat.name }}
+                @if (selectedCategoryId() === cat.id) {
+                  <span class="block text-[10px] font-normal text-white/75 mt-0.5">Seleccionado</span>
+                }
+              </button>
+
+              <!-- Delete button - sits at the bottom, always visible with clear contrast -->
+              <button
+                type="button"
+                (click)="requestDeleteCategory(cat)"
+                [attr.aria-label]="'Eliminar ' + cat.name"
+                class="flex items-center justify-center gap-1 px-3 py-1.5 text-xs font-semibold border-t transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-inset"
+                [ngClass]="{
+                  'border-white/20 bg-white/10 text-white hover:bg-red-600 hover:border-red-600': selectedCategoryId() === cat.id,
+                  'border-citri-gray-200 bg-citri-gray-50 text-red-500 hover:bg-red-500 hover:text-white hover:border-red-500': selectedCategoryId() !== cat.id
+                }"
+              >
+                <svg class="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                </svg>
+                Eliminar
+              </button>
+            </div>
+          }
+        </div>
+      }
+
+      <!-- Inline category creation form -->
+      @if (showCategoryForm()) {
+        <div class="mt-4 border border-citri-gray-300 rounded-citri-md p-4 bg-citri-gray-50">
+          <p class="text-sm font-semibold text-citri-gray-900 mb-3">Nuevo producto</p>
+          <form [formGroup]="categoryForm" (ngSubmit)="submitCategory()" class="space-y-3">
+            <div>
+              <label class="block text-xs font-semibold text-citri-gray-600 mb-1">Nombre <span class="text-red-500">*</span></label>
+                <input
+                formControlName="name"
+                type="text"
+                placeholder="Ej: Limones"
+                class="w-full px-3 py-2 border border-citri-gray-300 rounded-citri-md text-sm text-citri-gray-900 placeholder-citri-gray-300 focus:outline-none focus:ring-2 focus:ring-citri-green focus:border-transparent"
+              />
+              @if (categoryForm.get('name')?.invalid && categoryForm.get('name')?.touched) {
+                <p class="text-red-500 text-xs mt-1">El nombre es obligatorio.</p>
+              }
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-citri-gray-600 mb-1">Descripción</label>
+              <input
+                formControlName="description"
+                type="text"
+                placeholder="Descripción opcional"
+                class="w-full px-3 py-2 border border-citri-gray-300 rounded-citri-md text-sm text-citri-gray-900 placeholder-citri-gray-300 focus:outline-none focus:ring-2 focus:ring-citri-green focus:border-transparent"
+              />
+            </div>
+            <div class="flex items-center gap-2 pt-1">
+              <button
+                type="submit"
+                class="px-4 py-2 bg-citri-green text-white text-sm font-semibold rounded-citri-md hover:bg-citri-green-dark transition-colors duration-150"
+              >
+                Crear producto
+              </button>
+              <button
+                type="button"
+                (click)="showCategoryForm.set(false)"
+                class="px-4 py-2 bg-citri-gray-100 text-citri-gray-600 text-sm font-semibold rounded-citri-md hover:bg-citri-gray-300 transition-colors duration-150"
+              >
+                Cancelar
+              </button>
+            </div>
+          </form>
+        </div>
+      }
+    </div>
+
+    <!-- -- Section 2: Variedades ------------------------------------------ -->
+    @if (selectedCategoryId()) {
+      <div id="admin-product-workflow-top" class="bg-white rounded-citri-lg shadow-citri-card p-5 md:p-6 scroll-mt-28">
+
+        <!-- Section header -->
+        <div id="admin-products-header" class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between mb-4">
+          <h2 class="font-citri-sans font-bold text-citri-gray-900 text-lg flex items-center gap-2 min-w-0">
+            <span class="w-6 h-6 rounded-full bg-citri-green text-white text-xs font-bold flex items-center justify-center shrink-0">2</span>
+            <span class="truncate">
+              Variedades
+              @if (selectedCategory()) {
+                <span class="text-citri-gray-600 font-normal text-base"> - {{ selectedCategory()!.name }}</span>
+              }
+            </span>
+          </h2>
+          <button
+            type="button"
+            (click)="startCreateProduct()"
+            class="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 bg-citri-green text-white text-sm font-semibold rounded-citri-md hover:bg-citri-green-dark transition-colors duration-150 w-full sm:w-auto"
+          >
+            <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            Nueva variedad
+          </button>
+        </div>
+
+        <!-- -- Create flow panel ---------------------------------------- -->
+        @if (createStep() !== null) {
+          <div class="border-2 border-citri-green rounded-citri-lg p-5 mb-5 bg-citri-green-light">
+
+            <!-- Panel title: show which variety is being created -->
+            <p class="text-xs font-semibold text-citri-green uppercase tracking-wide mb-3">
+              @if (createdProductId()) {
+                Creando variedad: <span class="normal-case font-bold">{{ createProductForm.getRawValue().name }}</span>
+              } @else {
+                Nueva variedad
+              }
+            </p>
+
+            <!-- Step indicator - chips are clickable to navigate back/forward -->
+            <div class="flex flex-wrap items-center gap-1.5 mb-5 overflow-hidden">
+              <button
+                type="button"
+                (click)="selectCreateStep('data')"
+                class="flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full transition-colors duration-150 cursor-pointer"
+                [ngClass]="createStep() === 'data' ? 'bg-citri-green text-white' : 'bg-white text-citri-gray-600 hover:bg-citri-green-light hover:text-citri-green'"
+              >
+                <span class="w-4 h-4 rounded-full border-2 flex items-center justify-center text-[10px] font-bold"
+                  [ngClass]="createStep() === 'data' ? 'border-white' : 'border-citri-gray-300'">1</span>
+                Datos
+              </button>
+              <svg class="w-3 h-3 text-citri-gray-300 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+              </svg>
+              <button
+                type="button"
+                (click)="selectCreateStep('image')"
+                [disabled]="!createdProductId()"
+                class="flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full transition-colors duration-150"
+                [ngClass]="createStep() === 'image' ? 'bg-citri-green text-white cursor-pointer' : createdProductId() ? 'bg-white text-citri-gray-600 hover:bg-citri-green-light hover:text-citri-green cursor-pointer' : 'bg-white text-citri-gray-300 cursor-not-allowed'"
+              >
+                <span class="w-4 h-4 rounded-full border-2 flex items-center justify-center text-[10px] font-bold"
+                  [ngClass]="createStep() === 'image' ? 'border-white' : 'border-citri-gray-300'">2</span>
+                Imagen
+              </button>
+              <svg class="w-3 h-3 text-citri-gray-300 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+              </svg>
+              <!-- Options chip: only enabled after image is uploaded -->
+              <button
+                type="button"
+                (click)="selectCreateStep('options')"
+                [disabled]="!createdProductId() || !createImageUploaded()"
+                class="flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full transition-colors duration-150"
+                [ngClass]="createStep() === 'options' ? 'bg-citri-green text-white cursor-pointer' : (createdProductId() && createImageUploaded()) ? 'bg-white text-citri-gray-600 hover:bg-citri-green-light hover:text-citri-green cursor-pointer' : 'bg-white text-citri-gray-300 cursor-not-allowed'"
+              >
+                <span class="w-4 h-4 rounded-full border-2 flex items-center justify-center text-[10px] font-bold"
+                  [ngClass]="createStep() === 'options' ? 'border-white' : 'border-citri-gray-300'">3</span>
+                Características
+              </button>
+            </div>
+
+            <!-- Step: data -->
+            @if (createStep() === 'data') {
+              <p class="text-sm font-semibold text-citri-gray-900 mb-3">Paso 1 - Datos de la variedad</p>
+              <form [formGroup]="createProductForm" (ngSubmit)="submitCreateData()" class="space-y-3">
+                <div>
+                  <label class="block text-xs font-semibold text-citri-gray-600 mb-1">Nombre <span class="text-red-500">*</span></label>
+                  <input
+                    formControlName="name"
+                    type="text"
+                    placeholder="Nombre del producto"
+                    class="w-full px-3 py-2 border border-citri-gray-300 rounded-citri-md text-sm text-citri-gray-900 placeholder-citri-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-citri-green focus:border-transparent"
+                  />
+                  @if (createProductForm.get('name')?.invalid && createProductForm.get('name')?.touched) {
+                    <p class="text-red-500 text-xs mt-1">El nombre es obligatorio.</p>
+                  }
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-citri-gray-600 mb-1">Descripción</label>
+                  <textarea
+                    formControlName="description"
+                    rows="2"
+                    placeholder="Descripción opcional"
+                    class="w-full px-3 py-2 border border-citri-gray-300 rounded-citri-md text-sm text-citri-gray-900 placeholder-citri-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-citri-green focus:border-transparent resize-none"
+                  ></textarea>
+                </div>
+                <div class="flex items-center gap-2 pt-1">
+                  <button
+                    type="submit"
+                    class="px-4 py-2 bg-citri-green text-white text-sm font-semibold rounded-citri-md hover:bg-citri-green-dark transition-colors duration-150"
+                  >
+                    Siguiente paso
+                  </button>
+                  <button
+                    type="button"
+                    (click)="cancelCreate()"
+                    class="px-4 py-2 bg-white text-citri-gray-600 text-sm font-semibold rounded-citri-md border border-citri-gray-300 hover:bg-citri-gray-100 transition-colors duration-150"
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </form>
+            }
+
+            <!-- Step: image -->
+            @if (createStep() === 'image') {
+              <p class="text-sm font-semibold text-citri-gray-900 mb-3">Paso 2 - Imagen de la variedad</p>
+              <div class="space-y-3">
+
+                <!-- Image preview (shown after successful upload) -->
+                @if (createImageUploaded() && productImages().length > 0) {
+                  <div class="rounded-citri-md overflow-hidden border border-citri-gray-200 w-full max-w-xs">
+                    <img
+                      [src]="resolveImageUrl(productImages()[0].imagePath)"
+                      alt="Vista previa"
+                      class="w-full aspect-video object-cover"
+                    />
+                  </div>
+                  <p class="text-xs text-citri-green font-semibold flex items-center gap-1">
+                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                    Imagen subida correctamente.
+                  </p>
+                }
+
+                <!-- Upload / uploading state -->
+                @if (!createImageUploaded()) {
+                  <label
+                    class="inline-flex items-center gap-2 px-4 py-2.5 rounded-citri-md text-sm font-semibold transition-colors duration-150 cursor-pointer"
+                    [ngClass]="uploadingImage() ? 'bg-citri-gray-100 text-citri-gray-400 cursor-not-allowed' : 'bg-citri-green text-white hover:bg-citri-green-dark'"
+                  >
+                    @if (uploadingImage()) {
+                      <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                      </svg>
+                      Subiendo imagen...
+                    } @else {
+                      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                      </svg>
+                      Subir imagen
+                    }
+                    <input
+                      #fileInput
+                      type="file"
+                      accept="image/*"
+                      class="hidden"
+                      [disabled]="uploadingImage()"
+                      (change)="onFileSelectedAndUploadCreate($event)"
+                    />
+                  </label>
+                  @if (!uploadingImage()) {
+                    <p class="text-xs text-amber-700">Debes subir una imagen antes de continuar.</p>
+                  }
+                }
+
+                <!-- Action buttons (shown after image is uploaded) -->
+                @if (createImageUploaded()) {
+                  <div class="flex flex-wrap items-center gap-2 pt-1">
+                    <button
+                      type="button"
+                      (click)="advanceToOptions()"
+                      class="px-4 py-2 bg-citri-green text-white text-sm font-semibold rounded-citri-md hover:bg-citri-green-dark transition-colors duration-150"
+                    >
+                      Siguiente paso
+                    </button>
+                    <label
+                      class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-semibold rounded-citri-md border border-citri-gray-300 bg-white text-citri-gray-600 hover:border-citri-green hover:text-citri-green transition-colors duration-150 cursor-pointer"
+                      [class.opacity-50]="uploadingImage()"
+                    >
+                      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+                      </svg>
+                      Cambiar imagen
+                      <input
+                        type="file"
+                        accept="image/*"
+                        class="hidden"
+                        [disabled]="uploadingImage()"
+                        (change)="onFileSelectedAndUploadCreate($event)"
+                      />
+                    </label>
+                  </div>
+                }
+
+                <!-- Back button -->
+                <div class="pt-1">
+                  <button
+                    type="button"
+                    (click)="selectCreateStep('data')"
+                    class="inline-flex items-center gap-1.5 text-sm text-citri-gray-600 hover:text-citri-gray-900 transition-colors duration-150"
+                  >
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                    </svg>
+                    Volver atrás
+                  </button>
+                </div>
+              </div>
+            }
+
+            <!-- Step: options -->
+            @if (createStep() === 'options') {
+              <p class="text-sm font-semibold text-citri-gray-900 mb-4">Paso 3 - Características de la variedad</p>
+              <div class="space-y-5">
+                @for (optType of optionTypes; track optType.key) {
+                  <div>
+                    <!-- Label + required indicator -->
+                    <p class="text-sm font-semibold text-citri-gray-900 mb-2 flex items-center gap-1.5">
+                      <span class="w-1.5 h-1.5 rounded-full bg-citri-green inline-block"></span>
+                      {{ optType.label }}
+                      @if (getOptions(optType.key).length === 0) {
+                        <span class="text-red-500 text-[10px] font-semibold ml-1">Obligatorio</span>
+                      }
+                    </p>
+
+                    <!-- Option chips -->
+                    @if (getOptions(optType.key).length > 0) {
+                      <div class="flex flex-wrap gap-1.5 mb-2">
+                        @for (opt of getOptions(optType.key); track opt.id) {
+                          @if (isEditingOption(optType.key, opt.id)) {
+                            <!-- Inline edit row -->
+                            <form [formGroup]="editOptionForm" (ngSubmit)="saveEditOption(optType.key, opt.id)"
+                                  class="flex items-center gap-1 w-full max-w-xs">
+                              <input
+                                formControlName="name"
+                                type="text"
+                                class="flex-1 min-w-0 px-2 py-1 border rounded-citri-sm text-xs text-citri-gray-900 focus:outline-none focus:ring-2 focus:ring-citri-green focus:border-transparent"
+                                [class.border-red-400]="editOptionForm.get('name')?.invalid && editOptionForm.get('name')?.touched"
+                                [class.border-citri-gray-300]="!(editOptionForm.get('name')?.invalid && editOptionForm.get('name')?.touched)"
+                              />
+                              <button type="submit" class="px-2 py-1 bg-citri-green text-white text-xs font-semibold rounded-citri-sm hover:bg-citri-green-dark transition-colors shrink-0" title="Guardar">
+                                <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                              </button>
+                              <button type="button" (click)="cancelEditOption()" class="px-2 py-1 bg-citri-gray-100 text-citri-gray-600 text-xs font-semibold rounded-citri-sm hover:bg-citri-gray-300 transition-colors shrink-0" title="Cancelar">
+                                <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                              </button>
+                            </form>
+                          } @else {
+                            <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-white text-citri-green text-xs font-semibold rounded-full border border-citri-green">
+                              {{ opt.name }}
+                              <button type="button" (click)="startEditOption(optType.key, opt)" class="ml-0.5 text-citri-gray-400 hover:text-citri-green transition-colors" title="Editar">
+                                <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931z"/></svg>
+                              </button>
+                              <button type="button" (click)="removeOption(optType.key, opt.id)" class="ml-0.5 text-citri-green hover:text-red-500 transition-colors" title="Eliminar">
+                                <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                              </button>
+                            </span>
+                          }
+                        }
+                      </div>
+                    } @else {
+                      <p class="text-red-500 text-xs mb-2 font-medium">{{ optType.requiredMsg }}</p>
+                    }
+
+                    <!-- Add form -->
+                    <form [formGroup]="optionForms[optType.key]" (ngSubmit)="submitOption(optType.key)" class="flex items-center gap-2">
+                      <input
+                        [id]="'opt-input-' + optType.key"
+                        formControlName="name"
+                        type="text"
+                        [placeholder]="'+ Añadir ' + optType.singleLabel"
+                        class="flex-1 min-w-0 px-3 py-1.5 border rounded-citri-sm text-xs text-citri-gray-900 placeholder-citri-gray-400 bg-white focus:outline-none focus:ring-2 focus:ring-citri-green focus:border-transparent"
+                        [class.border-red-400]="isOptionNameInvalid(optType.key)"
+                        [class.border-citri-gray-300]="!(isOptionNameInvalid(optType.key))"
+                      />
+                      <button type="submit" class="px-3 py-1.5 bg-citri-green text-white text-xs font-semibold rounded-citri-sm hover:bg-citri-green-dark transition-colors shrink-0">
+                        
+                        + Añadir
+                      </button>
+                    </form>
+                    @if (isOptionNameInvalid(optType.key)) {
+                      <p class="text-red-500 text-[10px] mt-1">El nombre no puede estar vacío.</p>
+                    }
+                  </div>
+                }
+              </div>
+
+              <!-- Save button + validation summary -->
+              <div class="flex flex-col items-center gap-2 mt-6">
+                @if (!hasRequiredOptions()) {
+                  <div class="w-full max-w-xs space-y-1">
+                    @if (getOptions('calibers').length === 0) {
+                      <p class="text-xs text-red-600 bg-red-50 border border-red-200 rounded-citri-sm px-3 py-1.5">Debes añadir al menos un calibre.</p>
+                    }
+                    @if (getOptions('qualities').length === 0) {
+                      <p class="text-xs text-red-600 bg-red-50 border border-red-200 rounded-citri-sm px-3 py-1.5">Debes añadir al menos una calidad.</p>
+                    }
+                    @if (getOptions('formats').length === 0) {
+                      <p class="text-xs text-red-600 bg-red-50 border border-red-200 rounded-citri-sm px-3 py-1.5">Debes añadir al menos un formato.</p>
+                    }
+                  </div>
+                }
+                <button
+                  type="button"
+                  (click)="finishCreate()"
+                  [disabled]="!createImageUploaded() || !hasRequiredOptions()"
+                  class="w-full max-w-xs px-6 py-3 text-base font-bold rounded-citri-lg transition-colors duration-150 shadow-citri-card"
+                  [ngClass]="(createImageUploaded() && hasRequiredOptions()) ? 'bg-citri-green text-white hover:bg-citri-green-dark' : 'bg-citri-gray-200 text-citri-gray-400 cursor-not-allowed'"
+                >
+                  Guardar producto
+                </button>
+                <button
+                  type="button"
+                  (click)="cancelCreate()"
+                  class="text-sm text-citri-gray-600 hover:text-citri-gray-900 transition-colors duration-150"
+                >
+                  Cancelar
+                </button>
+              </div>
+            }
+
+          </div>
+        }
+        <!-- /create flow panel -->
+
+        <!-- Products loading / empty -->
+        @if (isLoadingProducts()) {
+          <div class="flex items-center gap-2 text-citri-gray-600 text-sm py-4">
+            <svg class="w-4 h-4 animate-spin text-citri-green" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+            </svg>
+            Cargando productos...
+          </div>
+        } @else if (products().length === 0) {
+          <div class="text-center py-10 text-citri-gray-600">
+            <svg class="w-10 h-10 mx-auto mb-3 text-citri-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+            </svg>
+            <p class="text-sm font-medium">No hay variedades en este producto.</p>
+            <p class="text-xs mt-1">Pulsa "Nueva variedad" para añadir la primera.</p>
+          </div>
+        } @else {
+
+          <!-- Product grid -->
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            @for (product of products(); track product.id) {
+
+              <!-- Product card -->
+              <div class="border border-citri-gray-300 rounded-citri-md overflow-hidden bg-citri-gray-50">
+
+                <!-- Image area -->
+                <div class="aspect-video bg-citri-gray-100 flex items-center justify-center overflow-hidden">
+                  @if (product.image) {
+                    <img
+                      [src]="resolveImageUrl(product.image)"
+                      [alt]="product.name"
+                      class="w-full h-full object-cover"
+                      (error)="$any($event.target).style.display='none'"
+                    />
+                  } @else {
+                    <svg class="w-10 h-10 text-citri-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                    </svg>
+                  }
+                </div>
+
+                <!-- Card body -->
+                <div class="p-3">
+                  <p class="font-semibold text-citri-gray-900 text-sm truncate">{{ product.name }}</p>
+                  @if (product.description) {
+                    <p class="text-citri-gray-600 text-xs mt-0.5 line-clamp-2 leading-snug">{{ product.description }}</p>
+                  }
+                </div>
+
+                <!-- Card actions: Edit, Out-of-season toggle, Delete -->
+                <div class="px-3 pb-3 flex items-center gap-2 flex-wrap">
+                  <button
+                    type="button"
+                    (click)="openInlineEdit(product)"
+                    class="flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold border rounded-citri-sm transition-colors duration-150"
+                    [ngClass]="{
+                      'bg-citri-green text-white border-citri-green': editingProductId() === product.id,
+                      'bg-white text-citri-gray-600 border-citri-gray-300 hover:border-citri-green hover:text-citri-green': editingProductId() !== product.id
+                    }"
+                  >
+                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125" />
+                    </svg>
+                    Editar
+                  </button>
+
+                  <!-- Out-of-season toggle -->
+                  <button
+                    type="button"
+                    (click)="toggleOutOfSeason(product)"
+                    [disabled]="isTogglingOutOfSeason(product.id)"
+                    [attr.aria-pressed]="product.isOutOfSeason"
+                    [attr.aria-label]="product.isOutOfSeason ? 'Marcar como disponible' : 'Marcar fuera de temporada'"
+                    class="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold border rounded-citri-sm transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
+                    [ngClass]="{
+                      'bg-orange-50 text-orange-600 border-orange-300 hover:bg-orange-100': product.isOutOfSeason,
+                      'bg-white text-citri-gray-500 border-citri-gray-300 hover:border-orange-300 hover:text-orange-500': !product.isOutOfSeason
+                    }"
+                  >
+                    @if (isTogglingOutOfSeason(product.id)) {
+                      <svg class="w-3.5 h-3.5 animate-spin" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                      </svg>
+                    } @else {
+                      <!-- Toggle pill -->
+                      <span class="relative inline-flex h-4 w-7 shrink-0 items-center rounded-full transition-colors"
+                        [class.bg-orange-400]="product.isOutOfSeason"
+                        [class.bg-citri-gray-300]="!product.isOutOfSeason">
+                        <span class="inline-block h-3 w-3 transform rounded-full bg-white shadow transition-transform"
+                          [class.translate-x-3.5]="product.isOutOfSeason"
+                          [class.translate-x-0.5]="!product.isOutOfSeason">
+                        </span>
+                      </span>
+                    }
+                    Fuera de temporada
+                  </button>
+
+                  <button
+                    type="button"
+                    (click)="requestDeleteProduct(product)"
+                    class="flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold text-red-500 bg-white border border-red-200 rounded-citri-sm hover:bg-red-50 transition-colors duration-150"
+                  >
+                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                    </svg>
+                    Eliminar
+                  </button>
+                </div>
+
+                <!-- -- Inline edit panel -------------------------------- -->
+                @if (editingProductId() === product.id) {
+                  <div class="border-t border-citri-gray-300 bg-white p-4">
+
+                    <!-- Panel header with close button -->
+                    <div class="flex items-center justify-between mb-4">
+                      <p class="text-xs font-semibold text-citri-gray-600 uppercase tracking-wide">Editar - {{ product.name }}</p>
+                      <button
+                        type="button"
+                        (click)="closeInlineEdit()"
+                        class="text-citri-gray-300 hover:text-citri-gray-600 transition-colors duration-150"
+                        title="Cerrar"
+                      >
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
+                    </div>
+
+                    <!-- a) Name / description form -->
+                    <form [formGroup]="editProductForm" id="editProductForm-{{ product.id }}" class="space-y-3 mb-5">
+                      <div>
+                        <label class="block text-xs font-semibold text-citri-gray-600 mb-1">Nombre <span class="text-red-500">*</span></label>
+                        <input
+                          formControlName="name"
+                          type="text"
+                          placeholder="Nombre del producto"
+                          class="w-full px-3 py-2 border border-citri-gray-300 rounded-citri-md text-sm text-citri-gray-900 placeholder-citri-gray-300 focus:outline-none focus:ring-2 focus:ring-citri-green focus:border-transparent"
+                        />
+                        @if (editProductForm.get('name')?.invalid && editProductForm.get('name')?.touched) {
+                          <p class="text-red-500 text-xs mt-1">El nombre es obligatorio.</p>
+                        }
+                      </div>
+                      <div>
+                        <label class="block text-xs font-semibold text-citri-gray-600 mb-1">Descripción</label>
+                        <textarea
+                          formControlName="description"
+                          rows="6"
+                          placeholder="Descripción opcional"
+                          class="w-full px-3 py-2 border border-citri-gray-300 rounded-citri-md text-sm text-citri-gray-900 placeholder-citri-gray-300 focus:outline-none focus:ring-2 focus:ring-citri-green focus:border-transparent resize-none min-h-[140px]"
+                        ></textarea>
+                      </div>
+                    </form>
+
+                    <!-- b) Images section -->
+                    <div class="mb-5">
+                      <p class="text-xs font-semibold text-citri-gray-600 uppercase tracking-wide mb-3">Imágenes</p>
+                      @if (productImages().length > 0) {
+                        <div class="flex flex-wrap gap-2 mb-3">
+                          @for (img of productImages(); track img.id) {
+                            <div class="relative group w-20 h-20 rounded-citri-sm overflow-hidden border border-citri-gray-300">
+                              <img
+                                [src]="resolveImageUrl(img.imagePath)"
+                                alt="Imagen del producto"
+                                class="w-full h-full object-cover"
+                              />
+                              <button
+                                type="button"
+                                (click)="deleteImage(img.id)"
+                                class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-150"
+                                title="Eliminar imagen"
+                              >
+                                <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                              </button>
+                            </div>
+                          }
+                        </div>
+                      } @else {
+                        <p class="text-citri-gray-600 text-xs mb-3">Sin imágenes todavía.</p>
+                      }
+                      <div class="flex items-center gap-2 flex-wrap">
+                        <label class="flex items-center gap-1.5 px-3 py-1.5 bg-citri-gray-100 text-citri-gray-600 text-xs font-semibold rounded-citri-sm border border-citri-gray-300 hover:bg-citri-green-light hover:text-citri-green hover:border-citri-green cursor-pointer transition-colors duration-150">
+                          <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M18.375 12.739l-7.693 7.693a4.5 4.5 0 01-6.364-6.364l10.94-10.94A3 3 0 1119.5 7.372L8.552 18.32m.009-.01l-.01.01m5.699-9.941l-7.81 7.81a1.5 1.5 0 002.112 2.13" />
+                          </svg>
+                          @if (uploadingImage()) {
+                            <svg class="w-3.5 h-3.5 animate-spin" fill="none" viewBox="0 0 24 24">
+                              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                            </svg>
+                            Subiendo...
+                          } @else {
+                            Cambiar imagen
+                          }
+                          <input
+                            #fileInput
+                            type="file"
+                            accept="image/*"
+                            class="hidden"
+                            [disabled]="uploadingImage()"
+                            (change)="onFileSelectedAndUpload($event)"
+                          />
+                        </label>
+                        <span class="text-xs text-citri-gray-500">La imagen se sube automáticamente al seleccionarla.</span>
+                      </div>
+                    </div>
+
+                    <!-- c) Options section -->
+                    <div>
+                      <p class="text-xs font-semibold text-citri-gray-600 uppercase tracking-wide mb-3">Características</p>
+                      <div class="space-y-4">
+                        @for (optType of optionTypes; track optType.key) {
+                          <div>
+                            <p class="text-sm font-semibold text-citri-gray-900 mb-2 flex items-center gap-1.5">
+                              <span class="w-1.5 h-1.5 rounded-full bg-citri-green inline-block"></span>
+                              {{ optType.label }}
+                            </p>
+
+                            <!-- Option chips -->
+                            @if (getOptions(optType.key).length > 0) {
+                              <div class="flex flex-wrap gap-1.5 mb-2">
+                                @for (opt of getOptions(optType.key); track opt.id) {
+                                  @if (isEditingOption(optType.key, opt.id)) {
+                                    <!-- Inline edit row -->
+                                    <form [formGroup]="editOptionForm" (ngSubmit)="saveEditOption(optType.key, opt.id)"
+                                          class="flex items-center gap-1 w-full max-w-xs">
+                                      <input
+                                        formControlName="name"
+                                        type="text"
+                                        class="flex-1 min-w-0 px-2 py-1 border rounded-citri-sm text-xs text-citri-gray-900 focus:outline-none focus:ring-2 focus:ring-citri-green focus:border-transparent"
+                                        [class.border-red-400]="editOptionForm.get('name')?.invalid && editOptionForm.get('name')?.touched"
+                                        [class.border-citri-gray-300]="!(editOptionForm.get('name')?.invalid && editOptionForm.get('name')?.touched)"
+                                      />
+                                      <button type="submit" class="px-2 py-1 bg-citri-green text-white text-xs font-semibold rounded-citri-sm hover:bg-citri-green-dark transition-colors shrink-0" title="Guardar">
+                                        <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                      </button>
+                                      <button type="button" (click)="cancelEditOption()" class="px-2 py-1 bg-citri-gray-100 text-citri-gray-600 text-xs font-semibold rounded-citri-sm hover:bg-citri-gray-300 transition-colors shrink-0" title="Cancelar">
+                                        <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                                      </button>
+                                    </form>
+                                  } @else {
+                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-citri-green-light text-citri-green text-xs font-semibold rounded-full">
+                                      {{ opt.name }}
+                                      <button type="button" (click)="startEditOption(optType.key, opt)" class="ml-0.5 text-citri-gray-400 hover:text-citri-green transition-colors" title="Editar">
+                                        <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931z"/></svg>
+                                      </button>
+                                      <button type="button" (click)="removeOption(optType.key, opt.id)" class="ml-0.5 text-citri-green hover:text-red-500 transition-colors" title="Eliminar">
+                                        <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                                      </button>
+                                    </span>
+                                  }
+                                }
+                              </div>
+                            } @else {
+                              <p class="text-citri-gray-600 text-xs mb-2">Sin {{ optType.label.toLowerCase() }} definidos.</p>
+                            }
+
+                            <!-- Add form -->
+                            <form [formGroup]="optionForms[optType.key]" (ngSubmit)="submitOption(optType.key)" class="flex items-center gap-2">
+                              <input
+                                [id]="'opt-input-' + optType.key"
+                                formControlName="name"
+                                type="text"
+                                [placeholder]="'+ Añadir ' + optType.singleLabel"
+                                class="flex-1 min-w-0 px-3 py-1.5 border rounded-citri-sm text-xs text-citri-gray-900 placeholder-citri-gray-400 focus:outline-none focus:ring-2 focus:ring-citri-green focus:border-transparent"
+                                [class.border-red-400]="isOptionNameInvalid(optType.key)"
+                                [class.border-citri-gray-300]="!(isOptionNameInvalid(optType.key))"
+                              />
+                              <button type="submit" class="px-3 py-1.5 bg-citri-green text-white text-xs font-semibold rounded-citri-sm hover:bg-citri-green-dark transition-colors duration-150 shrink-0">
+                                + Añadir
+                              </button>
+                            </form>
+                            @if (isOptionNameInvalid(optType.key)) {
+                              <p class="text-red-500 text-[10px] mt-1">El nombre no puede estar vacío.</p>
+                            }
+                          </div>
+                        }
+                      </div>
+                    </div>
+
+                    <!-- Bottom save/cancel - single action area for the whole edit panel -->
+                    <div class="flex items-center gap-3 pt-5 mt-5 border-t border-citri-gray-200">
+                      <!-- Out-of-season toggle in edit panel -->
+                      <label class="flex items-center gap-2 cursor-pointer select-none mr-auto">
+                        <button
+                          type="button"
+                          role="switch"
+                          [attr.aria-checked]="product.isOutOfSeason"
+                          (click)="toggleOutOfSeason(product)"
+                          [disabled]="isTogglingOutOfSeason(product.id)"
+                          class="relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-1 disabled:opacity-50"
+                          [class.bg-orange-400]="product.isOutOfSeason"
+                          [class.bg-citri-gray-300]="!product.isOutOfSeason"
+                          aria-label="Marcar variedad fuera de temporada"
+                        >
+                          <span class="inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow transition-transform"
+                            [class.translate-x-4]="product.isOutOfSeason"
+                            [class.translate-x-1]="!product.isOutOfSeason">
+                          </span>
+                        </button>
+                        <span class="text-xs font-semibold"
+                          [class.text-orange-600]="product.isOutOfSeason"
+                          [class.text-citri-gray-600]="!product.isOutOfSeason">
+                          Fuera de temporada
+                        </span>
+                      </label>
+                      <button
+                        type="button"
+                        (click)="submitInlineEdit()"
+                        class="flex-1 px-4 py-2.5 bg-citri-green text-white text-sm font-semibold rounded-citri-md hover:bg-citri-green-dark transition-colors duration-150"
+                      >
+                        Guardar variedad
+                      </button>
+                      <button
+                        type="button"
+                        (click)="closeInlineEdit()"
+                        class="px-4 py-2.5 bg-citri-gray-100 text-citri-gray-600 text-sm font-semibold rounded-citri-md hover:bg-citri-gray-300 transition-colors duration-150"
+                      >
+                        Cancelar
+                      </button>
+                    </div>
+
+                  </div>
+                }
+                <!-- /inline edit panel -->
+
+              </div>
+              <!-- /product card -->
+            }
+          </div>
+          <!-- /product grid -->
+
+        }
+
+      </div>
+    }
+    <!-- /section 2 -->
+
+  </div>
+  <!-- /main content -->
+
+  <!-- -- Confirm delete category modal ------------------------------------ -->
+  @if (confirmDeleteCategory()) {
+    <div class="fixed inset-0 z-40 flex items-center justify-center p-4 bg-black/40">
+      <div class="bg-white rounded-citri-lg shadow-citri-card w-full max-w-sm p-6">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center shrink-0">
+            <svg class="w-5 h-5 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+            </svg>
+          </div>
+          <div>
+            <p class="font-semibold text-citri-gray-900">Eliminar categoría</p>
+            <p class="text-citri-gray-600 text-sm">Esta acción no se puede deshacer.</p>
+          </div>
+        </div>
+        <p class="text-sm text-citri-gray-600 mb-5">
+          ¿Seguro que quieres eliminar la categoría
+          <span class="font-semibold text-citri-gray-900">{{ confirmDeleteCategory()!.name }}</span>?
+          Se eliminarán también todos sus productos.
+        </p>
+        <div class="flex items-center gap-3">
+          <button
+            type="button"
+            (click)="executeDeleteCategory()"
+            [disabled]="isDeletingCategory()"
+            class="flex-1 px-4 py-2 bg-red-600 text-white text-sm font-semibold rounded-citri-md hover:bg-red-700 transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            @if (isDeletingCategory()) {
+              Eliminando...
+            } @else {
+              Sí, eliminar
+            }
+          </button>
+          <button
+            type="button"
+            (click)="cancelDeleteCategory()"
+            [disabled]="isDeletingCategory()"
+            class="flex-1 px-4 py-2 bg-citri-gray-100 text-citri-gray-600 text-sm font-semibold rounded-citri-md hover:bg-citri-gray-300 transition-colors duration-150 disabled:opacity-50"
+          >
+            Cancelar
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- -- Confirm delete product modal -------------------------------------- -->
+  @if (confirmDeleteProduct()) {
+    <div class="fixed inset-0 z-40 flex items-center justify-center p-4 bg-black/40">
+      <div class="bg-white rounded-citri-lg shadow-citri-card w-full max-w-sm p-6">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center shrink-0">
+            <svg class="w-5 h-5 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+            </svg>
+          </div>
+          <div>
+            <p class="font-semibold text-citri-gray-900">Eliminar producto</p>
+            <p class="text-citri-gray-600 text-sm">Esta acción no se puede deshacer.</p>
+          </div>
+        </div>
+        <p class="text-sm text-citri-gray-600 mb-5">
+          ¿Seguro que quieres eliminar el producto
+          <span class="font-semibold text-citri-gray-900">{{ confirmDeleteProduct()!.name }}</span>?
+          Se eliminarán también sus imágenes y características.
+        </p>
+        <div class="flex items-center gap-3">
+          <button
+            type="button"
+            (click)="executeDeleteProduct()"
+            [disabled]="isDeletingProduct()"
+            class="flex-1 px-4 py-2 bg-red-600 text-white text-sm font-semibold rounded-citri-md hover:bg-red-700 transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            @if (isDeletingProduct()) {
+              Eliminando...
+            } @else {
+              Sí, eliminar
+            }
+          </button>
+          <button
+            type="button"
+            (click)="cancelDeleteProduct()"
+            [disabled]="isDeletingProduct()"
+            class="flex-1 px-4 py-2 bg-citri-gray-100 text-citri-gray-600 text-sm font-semibold rounded-citri-md hover:bg-citri-gray-300 transition-colors duration-150 disabled:opacity-50"
+          >
+            Cancelar
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+</div>

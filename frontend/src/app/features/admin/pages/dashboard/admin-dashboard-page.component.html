@@ -1,0 +1,193 @@
+<div class="min-h-screen bg-citri-gray-50">
+
+  <!-- Header banner -->
+  <div class="bg-citri-green">
+    <div class="max-w-7xl mx-auto px-4 py-8 md:py-10">
+      <p class="text-white text-sm font-medium uppercase tracking-wide mb-1">Citribio</p>
+      <h1 class="font-citri-sans font-bold text-white text-2xl md:text-3xl">Panel de administración</h1>
+      <p class="text-white text-sm mt-1">Gestiona productos, usuarios y pedidos desde aquí.</p>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-4 py-8 md:py-10">
+
+    <!-- ── Management cards (always first) ─────────────────────────────── -->
+    <h2 class="font-citri-sans font-bold text-citri-gray-900 text-xl mb-4">Gestión</h2>
+    <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+
+      <!-- Productos -->
+      <a
+        routerLink="/admin/productos-admin"
+        class="group bg-white rounded-citri-lg shadow-citri-card p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 flex flex-col gap-4"
+      >
+        <div class="w-12 h-12 rounded-citri-md bg-citri-green-light flex items-center justify-center">
+          <svg class="w-6 h-6 text-citri-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+          </svg>
+        </div>
+        <div>
+          <h2 class="font-citri-sans font-bold text-citri-gray-900 text-lg group-hover:text-citri-green transition-colors">
+            Productos
+          </h2>
+          <p class="text-citri-gray-600 text-sm mt-1 leading-relaxed">
+            Gestiona categorías, productos, imágenes y características.
+          </p>
+        </div>
+        <div class="mt-auto flex items-center gap-1 text-citri-green text-sm font-semibold">
+          Gestionar
+          <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+          </svg>
+        </div>
+      </a>
+
+      <!-- Usuarios -->
+      <a
+        routerLink="/admin/usuarios"
+        class="group bg-white rounded-citri-lg shadow-citri-card p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 flex flex-col gap-4"
+      >
+        <div class="w-12 h-12 rounded-citri-md bg-citri-green-light flex items-center justify-center">
+          <svg class="w-6 h-6 text-citri-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+          </svg>
+        </div>
+        <div>
+          <h2 class="font-citri-sans font-bold text-citri-gray-900 text-lg group-hover:text-citri-green transition-colors">
+            Usuarios
+          </h2>
+          <p class="text-citri-gray-600 text-sm mt-1 leading-relaxed">
+            Consulta usuarios, cambia roles y elimina cuentas.
+          </p>
+        </div>
+        <div class="mt-auto flex items-center gap-1 text-citri-green text-sm font-semibold">
+          Gestionar
+          <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+          </svg>
+        </div>
+      </a>
+
+      <!-- Pedidos -->
+      <a
+        routerLink="/admin/pedidos"
+        class="group bg-white rounded-citri-lg shadow-citri-card p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 flex flex-col gap-4"
+      >
+        <div class="w-12 h-12 rounded-citri-md bg-citri-green-light flex items-center justify-center">
+          <svg class="w-6 h-6 text-citri-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+          </svg>
+        </div>
+        <div>
+          <h2 class="font-citri-sans font-bold text-citri-gray-900 text-lg group-hover:text-citri-green transition-colors">
+            Pedidos
+          </h2>
+          <p class="text-citri-gray-600 text-sm mt-1 leading-relaxed">
+            Consulta el listado de pedidos recibidos y su estado.
+          </p>
+        </div>
+        <div class="mt-auto flex items-center gap-1 text-citri-green text-sm font-semibold">
+          Gestionar
+          <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+          </svg>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- ── Metrics Section (below management cards) ─────────────────────── -->
+    @if (isLoading()) {
+      <div class="mt-10">
+        <p class="text-sm text-citri-gray-600">Cargando métricas...</p>
+      </div>
+    } @else if (errorMessage()) {
+      <div class="mt-10 rounded-citri-sm bg-red-50 border border-red-200 px-4 py-3" role="alert">
+        <p class="text-red-700 text-sm">{{ errorMessage() }}</p>
+      </div>
+    } @else if (metrics()) {
+      <div class="mt-10">
+        <h2 class="font-citri-sans font-bold text-citri-gray-900 text-xl mb-4">Métricas del sistema</h2>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+
+          <!-- Total Users -->
+          <div class="bg-white rounded-citri-lg shadow-citri-card p-5 border-l-4 border-citri-green">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-wide text-citri-gray-600 mb-1">Usuarios</p>
+                <p class="text-3xl font-bold text-citri-gray-900">{{ metrics()!.totalUsers }}</p>
+              </div>
+              <div class="w-12 h-12 rounded-citri-md bg-citri-green-light flex items-center justify-center">
+                <svg class="w-6 h-6 text-citri-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Total Products -->
+          <div class="bg-white rounded-citri-lg shadow-citri-card p-5 border-l-4 border-citri-orange">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-wide text-citri-gray-600 mb-1">Productos</p>
+                <p class="text-3xl font-bold text-citri-gray-900">{{ metrics()!.totalProducts }}</p>
+              </div>
+              <div class="w-12 h-12 rounded-citri-md bg-orange-50 flex items-center justify-center">
+                <svg class="w-6 h-6 text-citri-orange" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Total Categories -->
+          <div class="bg-white rounded-citri-lg shadow-citri-card p-5 border-l-4 border-citri-yellow">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-wide text-citri-gray-600 mb-1">Categorías</p>
+                <p class="text-3xl font-bold text-citri-gray-900">{{ metrics()!.totalCategories }}</p>
+              </div>
+              <div class="w-12 h-12 rounded-citri-md bg-citri-yellow-light flex items-center justify-center">
+                <svg class="w-6 h-6 text-citri-gray-900" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Total Orders -->
+          <div class="bg-white rounded-citri-lg shadow-citri-card p-5 border-l-4 border-blue-500">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-wide text-citri-gray-600 mb-1">Pedidos</p>
+                <p class="text-3xl font-bold text-citri-gray-900">{{ totalOrdersCount() }}</p>
+              </div>
+              <div class="w-12 h-12 rounded-citri-md bg-blue-50 flex items-center justify-center">
+                <svg class="w-6 h-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Orders by Status -->
+        @if (getStatusEntries().length > 0) {
+          <div class="mt-6 bg-white rounded-citri-lg shadow-citri-card p-5">
+            <h3 class="font-citri-sans font-bold text-citri-gray-900 text-lg mb-4">Pedidos por estado</h3>
+            <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+              @for (entry of getStatusEntries(); track entry[0]) {
+                <div class="bg-citri-gray-50 rounded-citri-md p-3 text-center border border-citri-gray-200">
+                  <p class="text-xs font-medium text-citri-gray-600 mb-1 leading-tight">{{ getStatusLabel(entry[0]) }}</p>
+                  <p class="text-2xl font-bold text-citri-green">{{ entry[1] }}</p>
+                </div>
+              }
+            </div>
+          </div>
+        }
+
+      </div>
+    }
+
+  </div>
+</div>

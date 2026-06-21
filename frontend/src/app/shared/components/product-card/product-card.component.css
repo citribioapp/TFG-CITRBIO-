@@ -1,0 +1,12 @@
+/* Estilos reemplazados por Tailwind v4 */
+
+/* Prevent internal reflows from propagating to the page layout */
+:host {
+  display: block;
+  contain: layout;
+}
+
+/* Stable image container — aspect-ratio enforced, no CLS from image load */
+.card-image-container {
+  contain: strict;
+}

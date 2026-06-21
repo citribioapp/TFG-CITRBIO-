@@ -1,0 +1,53 @@
+name: Backend CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+
+    env:
+      APP_ENV: test
+      APP_DEBUG: 1
+      APP_SECRET: test_secret
+      DATABASE_URL: sqlite:///%kernel.project_dir%/var/test.db
+      JWT_SECRET_KEY: '%kernel.project_dir%/config/jwt/private.pem'
+      JWT_PUBLIC_KEY: '%kernel.project_dir%/config/jwt/public.pem'
+      JWT_PASSPHRASE: test_passphrase
+      RESEND_API_KEY: test
+      CONTACT_TO_EMAIL: test@example.com
+      CONTACT_FROM_EMAIL: test@example.com
+      MAILER_FROM: test@example.com
+      ORDER_NOTIFICATION_EMAIL: test@example.com
+      CONTACT_LOGO_URL: https://citribio-frontend.vercel.app/Citribio.png
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4
+          extensions: mbstring, intl, pdo_sqlite, openssl
+          coverage: none
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Prepare JWT keys
+        run: |
+          mkdir -p config/jwt
+          openssl genrsa -aes256 -passout pass:test_passphrase -out config/jwt/private.pem 4096
+          openssl rsa -pubout -in config/jwt/private.pem -passin pass:test_passphrase -out config/jwt/public.pem
+
+      - name: Clear Symfony cache
+        run: php bin/console cache:clear --env=test
+
+      - name: Run PHPUnit tests
+        run: vendor/bin/phpunit

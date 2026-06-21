@@ -1,0 +1,180 @@
+<div class="min-h-screen bg-citri-gray-50">
+
+  <!-- Header -->
+  <div class="bg-citri-green">
+    <div class="max-w-6xl mx-auto px-4 py-8 md:py-10">
+      <div>
+        <p class="text-white text-sm font-medium uppercase tracking-wide mb-1">Admin</p>
+        <h1 class="font-citri-sans font-bold text-white text-2xl md:text-3xl">Configurar producto</h1>
+        <p class="text-white text-sm mt-1">Gestiona calibres, calidades y formatos.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Back link -->
+  <div class="max-w-6xl mx-auto px-4 pt-6 pb-0">
+    <a routerLink="/admin"
+      class="inline-flex items-center gap-1.5 text-sm font-medium text-citri-gray-600 hover:text-citri-green transition-colors">
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+      </svg>
+      Panel admin
+    </a>
+  </div>
+
+  <div class="max-w-6xl mx-auto px-4 py-8 md:py-10 space-y-6">
+
+    <!-- Selectors -->
+    <div class="bg-white rounded-citri-lg shadow-citri-card p-6">
+      <h2 class="font-citri-sans font-bold text-citri-gray-900 text-base mb-4">Seleccionar producto</h2>
+      <div class="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label class="block text-sm font-medium text-citri-gray-900 mb-1.5">Categoría</label>
+          <select
+            class="w-full px-3 py-2.5 rounded-citri-sm border border-citri-gray-300 text-citri-gray-900 text-sm bg-white focus:outline-none focus:ring-2 focus:border-citri-green focus:ring-citri-green/20 transition-colors"
+            [value]="selectedCategoryId() ?? ''"
+            (change)="onCategoryChange($any($event.target).value)"
+          >
+            <option value="">Selecciona una categoría</option>
+            @for (category of categories(); track category.id) {
+              <option [value]="category.id">{{ category.name }}</option>
+            }
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-citri-gray-900 mb-1.5">Producto</label>
+          <select
+            class="w-full px-3 py-2.5 rounded-citri-sm border border-citri-gray-300 text-citri-gray-900 text-sm bg-white focus:outline-none focus:ring-2 focus:border-citri-green focus:ring-citri-green/20 transition-colors disabled:opacity-50"
+            [disabled]="!selectedCategoryId() || products().length === 0"
+            [value]="productId() ?? ''"
+            (change)="onProductChange($any($event.target).value)"
+          >
+            <option value="">Selecciona un producto</option>
+            @for (product of products(); track product.id) {
+              <option [value]="product.id">{{ product.name }}</option>
+            }
+          </select>
+          @if (isLoadingProducts()) {
+            <p class="mt-1 text-xs text-citri-gray-600">Cargando productos...</p>
+          }
+          @if (selectedCategoryId() && products().length === 0 && !isLoadingProducts()) {
+            <p class="mt-1 text-xs text-citri-gray-600">Esta categoría todavía no tiene productos.</p>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Feedback -->
+    @if (successMessage()) {
+      <div class="rounded-citri-sm bg-citri-green-light border border-citri-green px-4 py-3" role="status">
+        <p class="text-citri-green text-sm font-medium">{{ successMessage() }}</p>
+      </div>
+    }
+    @if (errorMessage()) {
+      <div class="rounded-citri-sm bg-red-50 border border-red-200 px-4 py-3" role="alert">
+        <p class="text-red-700 text-sm">{{ errorMessage() }}</p>
+      </div>
+    }
+
+    @if (!productId()) {
+      <div class="bg-white rounded-citri-lg shadow-citri-card p-6">
+        <p class="text-sm text-citri-gray-600">Selecciona un producto para configurar sus características.</p>
+      </div>
+    } @else {
+      <!-- Selected product info -->
+      <div class="bg-citri-green-light border border-citri-green rounded-citri-md px-4 py-3">
+        <p class="text-xs font-medium text-citri-green uppercase tracking-wide">Producto seleccionado</p>
+        <p class="mt-0.5 font-semibold text-citri-gray-900 text-sm">{{ productName() || ('#' + productId()) }}</p>
+      </div>
+
+      <!-- Option panels -->
+      <div class="grid gap-5 lg:grid-cols-3">
+        @for (type of optionTypes; track type.key) {
+          <section class="bg-white rounded-citri-lg shadow-citri-card p-5">
+            <h2 class="font-citri-sans font-bold text-citri-gray-900 text-base">{{ type.label }}</h2>
+            <p class="mt-1 text-xs text-citri-gray-600">{{ type.helpText }}</p>
+
+            <form class="mt-4 flex gap-2" [formGroup]="forms[type.key]" (ngSubmit)="submit(type.key)">
+              <input
+                [formControlName]="'name'"
+                class="min-w-0 flex-1 px-3 py-2 rounded-citri-sm border border-citri-gray-300 text-citri-gray-900 text-sm focus:outline-none focus:ring-2 focus:border-citri-green focus:ring-citri-green/20 transition-colors"
+                [placeholder]="'Nuevo ' + type.singleLabel.toLowerCase()"
+              />
+              <button type="submit"
+                class="px-3 py-2 bg-citri-green text-white text-sm font-semibold rounded-citri-sm hover:bg-citri-green-dark transition-colors">
+                Añadir
+              </button>
+            </form>
+
+            <div class="mt-4">
+              @if (getOptions(type.key).length === 0) {
+                <p class="text-xs text-citri-gray-600">Todavía no hay {{ type.label.toLowerCase() }}.</p>
+              } @else {
+                <div class="grid gap-2">
+                  @for (option of getOptions(type.key); track option.id) {
+                    @if (isEditingOption(type.key, option.id)) {
+                      <!-- Inline edit row -->
+                      <div class="flex items-center gap-2 rounded-citri-sm border-2 border-citri-green bg-citri-green-light px-3 py-2">
+                        <input
+                          type="text"
+                          [value]="editingOption()!.name"
+                          (input)="onEditNameInput($event)"
+                          (keydown.enter)="saveEditOption()"
+                          (keydown.escape)="cancelEditOption()"
+                          class="min-w-0 flex-1 px-2 py-1 rounded-citri-sm border border-citri-gray-300 text-citri-gray-900 text-sm bg-white focus:outline-none focus:ring-2 focus:border-citri-green focus:ring-citri-green/20 transition-colors"
+                          [attr.aria-label]="'Editar nombre de ' + type.singleLabel.toLowerCase()"
+                          autofocus
+                        />
+                        <button
+                          type="button"
+                          (click)="saveEditOption()"
+                          [disabled]="isSavingOption()"
+                          class="shrink-0 px-2.5 py-1 text-xs font-semibold rounded-citri-sm bg-citri-green text-white hover:bg-citri-green-dark transition-colors disabled:opacity-50"
+                          aria-label="Guardar"
+                        >
+                          {{ isSavingOption() ? '...' : 'OK' }}
+                        </button>
+                        <button
+                          type="button"
+                          (click)="cancelEditOption()"
+                          [disabled]="isSavingOption()"
+                          class="shrink-0 px-2.5 py-1 text-xs font-medium rounded-citri-sm border border-citri-gray-300 bg-white text-citri-gray-600 hover:bg-citri-gray-100 transition-colors disabled:opacity-50"
+                          aria-label="Cancelar edición"
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    } @else {
+                      <!-- Normal row -->
+                      <div class="flex items-center justify-between gap-2 rounded-citri-sm border border-citri-gray-300 px-3 py-2">
+                        <span class="text-sm text-citri-gray-900 min-w-0 truncate">{{ option.name }}</span>
+                        <div class="flex items-center gap-1.5 shrink-0">
+                          <button
+                            type="button"
+                            (click)="startEditOption(type.key, option)"
+                            class="px-2.5 py-1 text-xs font-medium rounded-citri-sm border border-citri-gray-300 text-citri-gray-700 hover:border-citri-green hover:text-citri-green transition-colors"
+                            [attr.aria-label]="'Editar ' + option.name"
+                          >
+                            Editar
+                          </button>
+                          <button
+                            type="button"
+                            (click)="removeOption(type.key, option.id)"
+                            class="px-2.5 py-1 text-xs font-medium rounded-citri-sm bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 transition-colors"
+                            [attr.aria-label]="'Eliminar ' + option.name"
+                          >
+                            Eliminar
+                          </button>
+                        </div>
+                      </div>
+                    }
+                  }
+                </div>
+              }
+            </div>
+          </section>
+        }
+      </div>
+    }
+  </div>
+</div>

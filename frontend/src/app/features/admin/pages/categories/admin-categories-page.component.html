@@ -1,0 +1,158 @@
+<div class="min-h-screen bg-citri-gray-50">
+
+  <!-- Header -->
+  <div class="bg-citri-green">
+    <div class="max-w-6xl mx-auto px-4 py-8 md:py-10">
+      <div>
+        <p class="text-white text-sm font-medium uppercase tracking-wide mb-1">Admin</p>
+        <h1 class="font-citri-sans font-bold text-white text-2xl md:text-3xl">Categorías</h1>
+        <p class="text-white text-sm mt-1">Crea y gestiona las categorías del catálogo.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Back link -->
+  <div class="max-w-6xl mx-auto px-4 pt-6 pb-0">
+    <a routerLink="/admin"
+      class="inline-flex items-center gap-1.5 text-sm font-medium text-citri-gray-600 hover:text-citri-green transition-colors">
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+      </svg>
+      Panel admin
+    </a>
+  </div>
+
+  <div class="max-w-6xl mx-auto px-4 py-8 md:py-10 space-y-8">
+
+    <!-- Create form -->
+    <div class="bg-white rounded-citri-lg shadow-citri-card p-6">
+      <h2 class="font-citri-sans font-bold text-citri-gray-900 text-base mb-4">Nueva categoría</h2>
+      <form [formGroup]="form" (ngSubmit)="submit()"
+        class="grid gap-3 sm:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)_auto] sm:items-end">
+        <input formControlName="name" placeholder="Nombre de la categoría"
+          class="min-w-0 w-full px-3 py-2.5 rounded-citri-sm border border-citri-gray-300 text-citri-gray-900 text-sm focus:outline-none focus:ring-2 focus:border-citri-green focus:ring-citri-green/20 transition-colors" />
+        <input formControlName="description" placeholder="Descripción opcional"
+          class="min-w-0 w-full px-3 py-2.5 rounded-citri-sm border border-citri-gray-300 text-citri-gray-900 text-sm focus:outline-none focus:ring-2 focus:border-citri-green focus:ring-citri-green/20 transition-colors" />
+        <button type="submit"
+          class="w-full sm:w-auto sm:self-end px-5 py-2.5 bg-citri-green text-white text-sm font-semibold rounded-citri-sm hover:bg-citri-green-dark transition-colors whitespace-nowrap">
+          Crear
+        </button>
+      </form>
+
+      @if (successMessage()) {
+        <div class="mt-4 rounded-citri-sm bg-citri-green-light border border-citri-green px-4 py-3" role="status">
+          <p class="text-citri-green text-sm font-medium">{{ successMessage() }}</p>
+        </div>
+      }
+      @if (errorMessage()) {
+        <div class="mt-4 rounded-citri-sm bg-red-50 border border-red-200 px-4 py-3" role="alert">
+          <p class="text-red-700 text-sm">{{ errorMessage() }}</p>
+        </div>
+      }
+    </div>
+
+    <!-- Categories list -->
+    <div class="bg-white rounded-citri-lg shadow-citri-card p-6">
+      <h2 class="font-citri-sans font-bold text-citri-gray-900 text-base mb-4">Categorías creadas</h2>
+
+      @if (isLoading()) {
+        <p class="text-sm text-citri-gray-600">Cargando categorías...</p>
+      } @else if (categories().length === 0) {
+        <p class="text-sm text-citri-gray-600">Todavía no hay categorías.</p>
+      } @else {
+        <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          @for (category of categories(); track category.id) {
+
+            @if (editingCategoryId() === category.id) {
+              <!-- Inline edit form -->
+              <div class="flex flex-col gap-3 p-4 rounded-citri-md border-2 border-citri-green bg-citri-green-light"
+                [formGroup]="editForm">
+                <p class="text-xs font-semibold text-citri-green uppercase tracking-wide">Editando</p>
+
+                <div>
+                  <label [for]="'edit-name-' + category.id"
+                    class="block text-xs font-medium text-citri-gray-900 mb-1">
+                    Nombre <span class="text-red-500">*</span>
+                  </label>
+                  <input
+                    [id]="'edit-name-' + category.id"
+                    formControlName="name"
+                    type="text"
+                    placeholder="Nombre de la categoría"
+                    class="w-full px-3 py-2 rounded-citri-sm border text-citri-gray-900 text-sm focus:outline-none focus:ring-2 focus:border-citri-green focus:ring-citri-green/20 transition-colors bg-white"
+                    [ngClass]="editForm.get('name')?.invalid && editForm.get('name')?.touched
+                      ? 'border-red-400'
+                      : 'border-citri-gray-300'"
+                  />
+                  @if (editForm.get('name')?.invalid && editForm.get('name')?.touched) {
+                    <p class="text-red-600 text-xs mt-1">El nombre es obligatorio.</p>
+                  }
+                </div>
+
+                <div>
+                  <label [for]="'edit-desc-' + category.id"
+                    class="block text-xs font-medium text-citri-gray-900 mb-1">
+                    Descripción
+                  </label>
+                  <input
+                    [id]="'edit-desc-' + category.id"
+                    formControlName="description"
+                    type="text"
+                    placeholder="Descripción opcional"
+                    class="w-full px-3 py-2 rounded-citri-sm border border-citri-gray-300 text-citri-gray-900 text-sm focus:outline-none focus:ring-2 focus:border-citri-green focus:ring-citri-green/20 transition-colors bg-white"
+                  />
+                </div>
+
+                <div class="flex gap-2 pt-1">
+                  <button
+                    type="button"
+                    (click)="saveEdit(category.id)"
+                    [disabled]="isSavingEdit()"
+                    class="flex-1 px-3 py-2 bg-citri-green text-white text-xs font-semibold rounded-citri-sm hover:bg-citri-green-dark transition-colors disabled:opacity-50"
+                  >
+                    {{ isSavingEdit() ? 'Guardando...' : 'Guardar' }}
+                  </button>
+                  <button
+                    type="button"
+                    (click)="cancelEdit()"
+                    [disabled]="isSavingEdit()"
+                    class="px-3 py-2 bg-white text-citri-gray-600 text-xs font-semibold rounded-citri-sm border border-citri-gray-300 hover:bg-citri-gray-100 transition-colors disabled:opacity-50"
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </div>
+
+            } @else {
+              <!-- Category card -->
+              <div class="flex flex-col gap-2 p-4 rounded-citri-md border border-citri-gray-300 hover:border-citri-green hover:shadow-citri-card transition-all duration-200">
+                <a [routerLink]="['/admin/productos']" [queryParams]="{ categoryId: category.id }"
+                  class="group flex flex-col gap-1 flex-1">
+                  <p class="font-semibold text-citri-gray-900 group-hover:text-citri-green transition-colors text-sm">
+                    {{ category.name }}
+                  </p>
+                  <p class="text-xs text-citri-gray-600">{{ category.description || 'Sin descripción' }}</p>
+                  <p class="text-xs text-citri-gray-600 mt-auto pt-1 border-t border-citri-gray-100">
+                    {{ category.products.length }} producto{{ category.products.length !== 1 ? 's' : '' }}
+                  </p>
+                </a>
+                <div class="flex gap-2 pt-1 border-t border-citri-gray-100">
+                  <button
+                    type="button"
+                    (click)="startEdit(category)"
+                    class="flex-1 px-3 py-1.5 text-xs font-semibold rounded-citri-sm border border-citri-gray-300 text-citri-gray-700 hover:border-citri-green hover:text-citri-green transition-colors"
+                    [attr.aria-label]="'Editar categoría ' + category.name"
+                  >
+                    Editar
+                  </button>
+                </div>
+              </div>
+            }
+
+          }
+        </div>
+      }
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,308 @@
+<div class="min-h-screen bg-citri-gray-50">
+
+  <!-- ── Header ──────────────────────────────────────────────────────────── -->
+  <div class="bg-citri-green" data-order-page-top>
+    <div class="max-w-4xl mx-auto px-4 py-8 md:py-10">
+      <p class="text-white text-sm font-medium uppercase tracking-wide mb-1">Admin · Pedidos</p>
+      @if (order()) {
+        <h1 class="font-citri-sans font-bold text-white text-2xl md:text-3xl">
+          Revisar pedido #{{ order()!.id }}
+        </h1>
+        <p class="text-white text-sm mt-1">{{ pageDescription() }}</p>
+      } @else {
+        <h1 class="font-citri-sans font-bold text-white text-2xl md:text-3xl">Revisar pedido</h1>
+      }
+    </div>
+  </div>
+
+  <!-- ── Back link ───────────────────────────────────────────────────────── -->
+  <div class="max-w-4xl mx-auto px-4 pt-6 pb-0">
+    <a routerLink="/admin/pedidos"
+      class="inline-flex items-center gap-1.5 text-sm font-medium text-citri-gray-600 hover:text-citri-green transition-colors">
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+      </svg>
+      Volver a pedidos
+    </a>
+  </div>
+
+  <div class="max-w-4xl mx-auto px-4 py-8 md:py-10 flex flex-col gap-6">
+
+    <!-- ── Loading ─────────────────────────────────────────────────────── -->
+    @if (isLoading()) {
+      <p class="text-sm text-citri-gray-600">Cargando pedido...</p>
+    }
+
+    <!-- ── Load error ──────────────────────────────────────────────────── -->
+    @if (loadError()) {
+      <div class="rounded-citri-sm bg-red-50 border border-red-200 px-4 py-3" role="alert" data-order-alert>
+        <p class="text-red-700 text-sm">{{ loadError() }}</p>
+      </div>
+    }
+
+    <!-- ── Success state ───────────────────────────────────────────────── -->
+    @if (successMessage()) {
+      <div class="rounded-citri-lg bg-citri-green-light border border-citri-green px-6 py-5 flex flex-col gap-3" role="status" data-order-alert>
+        <div class="flex items-start gap-3">
+          <svg class="w-5 h-5 text-citri-green shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <p class="text-sm font-semibold text-citri-green">{{ successMessage() }}</p>
+        </div>
+        <a routerLink="/admin/pedidos"
+          class="self-start inline-flex items-center gap-1.5 text-sm font-semibold text-citri-green hover:text-citri-green-dark transition-colors">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+          </svg>
+          Volver al listado de pedidos
+        </a>
+      </div>
+    }
+
+    @if (!isLoading() && !loadError() && order()) {
+
+      <!-- ── Status badge ───────────────────────────────────────────────── -->
+      <div class="flex items-center gap-2">
+        <span class="text-xs font-semibold px-2.5 py-1 rounded-citri-full"
+          [class]="getStatusClass(order()!.status)">
+          {{ getStatusLabel(order()!.status) }}
+        </span>
+        <span class="text-xs text-citri-gray-600">{{ formatDate(order()!.createdAt) }}</span>
+      </div>
+
+      <!-- ── Customer card ──────────────────────────────────────────────── -->
+      <section class="bg-white rounded-citri-lg shadow-citri-card p-6">
+        <h2 class="font-citri-sans font-bold text-citri-gray-900 text-base mb-4 flex items-center gap-2">
+          <span class="w-7 h-7 rounded-citri-md bg-citri-green-light flex items-center justify-center shrink-0">
+            <svg class="w-4 h-4 text-citri-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+            </svg>
+          </span>
+          Datos del cliente
+        </h2>
+        <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3 text-sm">
+          <div>
+            <dt class="text-[11px] font-semibold uppercase tracking-wide text-citri-gray-600 mb-0.5">Nombre</dt>
+            <dd class="font-medium text-citri-gray-900">{{ order()!.customer.name || 'Sin nombre' }}</dd>
+          </div>
+          <div>
+            <dt class="text-[11px] font-semibold uppercase tracking-wide text-citri-gray-600 mb-0.5">Email</dt>
+            <dd class="text-citri-gray-900">{{ order()!.customer.email || '-' }}</dd>
+          </div>
+          <div>
+            <dt class="text-[11px] font-semibold uppercase tracking-wide text-citri-gray-600 mb-0.5">Teléfono</dt>
+            <dd class="text-citri-gray-900">{{ order()!.customer.phone || '-' }}</dd>
+          </div>
+          <div>
+            <dt class="text-[11px] font-semibold uppercase tracking-wide text-citri-gray-600 mb-0.5">Fecha del pedido</dt>
+            <dd class="text-citri-gray-900">{{ formatDate(order()!.createdAt) }}</dd>
+          </div>
+          <div class="sm:col-span-2">
+            <dt class="text-[11px] font-semibold uppercase tracking-wide text-citri-gray-600 mb-0.5">Dirección de entrega</dt>
+            <dd class="text-citri-gray-900">{{ order()!.deliveryAddress }}</dd>
+          </div>
+        </dl>
+      </section>
+
+      <!-- ── Products + prices ──────────────────────────────────────────── -->
+      <section class="bg-white rounded-citri-lg shadow-citri-card p-6">
+        <h2 class="font-citri-sans font-bold text-citri-gray-900 text-base mb-4 flex items-center gap-2">
+          <span class="w-7 h-7 rounded-citri-md bg-citri-green-light flex items-center justify-center shrink-0">
+            <svg class="w-4 h-4 text-citri-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+            </svg>
+          </span>
+          Productos del pedido
+        </h2>
+
+        @if (reviewItems().length === 0) {
+          <p class="text-sm text-citri-gray-600">Este pedido no tiene productos.</p>
+        } @else {
+
+          <!-- Mobile: card per item -->
+          <div class="grid gap-4 md:hidden">
+            @for (item of reviewItems(); track item.id; let i = $index) {
+              <div class="rounded-citri-md border border-citri-gray-300 p-4 bg-citri-gray-50">
+                <p class="font-semibold text-citri-gray-900 text-sm mb-1">{{ item.product }}</p>
+                <p class="text-xs text-citri-gray-600 mb-3">
+                  @if (item.caliber && item.caliber !== '-') { Cal: {{ item.caliber }} · }
+                  @if (item.quality && item.quality !== '-') { {{ item.quality }} · }
+                  @if (item.format && item.format !== '-') { {{ item.format }} · }
+                  Cant: <strong>{{ item.quantity }}</strong>
+                </p>
+                <div class="flex items-center gap-3">
+                  <div class="flex-1">
+                    <label [for]="'price-' + item.id" class="text-[11px] font-semibold uppercase tracking-wide text-citri-gray-600 mb-1 block">
+                      Precio unitario (€)
+                    </label>
+                    <input
+                      [id]="'price-' + item.id"
+                      type="text"
+                      inputmode="decimal"
+                      placeholder="0.00"
+                      [ngModel]="item.unitPriceInput"
+                      (ngModelChange)="updateItemPrice(i, $event)"
+                      (keydown)="onPriceKeydown($event)"
+                      [disabled]="!!successMessage()"
+                      class="w-full rounded-citri-sm border border-citri-gray-300 bg-white px-3 py-2 text-sm text-citri-gray-900 placeholder:text-citri-gray-600 focus:border-citri-green focus:outline-none focus:ring-2 focus:ring-citri-green/30 disabled:opacity-50"
+                    />
+                  </div>
+                  <div class="text-right shrink-0">
+                    <p class="text-[11px] font-semibold uppercase tracking-wide text-citri-gray-600 mb-1">Subtotal</p>
+                    <p class="text-sm font-bold text-citri-gray-900">{{ formatCurrency(lineSubtotal(item)) }}</p>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+
+          <!-- Desktop: table -->
+          <div class="hidden md:block overflow-x-auto">
+            <table class="min-w-full text-sm">
+              <thead>
+                <tr class="border-b-2 border-citri-green/20">
+                  <th class="pb-3 pr-4 text-left text-xs font-semibold text-citri-green uppercase tracking-wide">Producto</th>
+                  <th class="pb-3 pr-4 text-left text-xs font-semibold text-citri-green uppercase tracking-wide">Detalles</th>
+                  <th class="pb-3 pr-4 text-center text-xs font-semibold text-citri-green uppercase tracking-wide">Cant.</th>
+                  <th class="pb-3 pr-4 text-right text-xs font-semibold text-citri-green uppercase tracking-wide">Precio unit. (€)</th>
+                  <th class="pb-3 text-right text-xs font-semibold text-citri-green uppercase tracking-wide">Subtotal</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-citri-gray-100">
+                @for (item of reviewItems(); track item.id; let i = $index) {
+                  <tr class="hover:bg-citri-gray-50 transition-colors">
+                    <td class="py-4 pr-4 font-semibold text-citri-gray-900 align-middle">{{ item.product }}</td>
+                    <td class="py-4 pr-4 text-citri-gray-600 text-xs align-middle leading-relaxed">
+                      @if (item.caliber && item.caliber !== '-') { <span>Cal: {{ item.caliber }}</span><br> }
+                      @if (item.quality && item.quality !== '-') { <span>{{ item.quality }}</span><br> }
+                      @if (item.format && item.format !== '-') { <span>{{ item.format }}</span> }
+                    </td>
+                    <td class="py-4 pr-4 text-center align-middle">
+                      <span class="inline-flex items-center justify-center px-2.5 py-0.5 bg-citri-green text-white text-xs font-bold rounded-full min-w-[28px]">
+                        {{ item.quantity }}
+                      </span>
+                    </td>
+                    <td class="py-4 pr-4 align-middle">
+                      <div class="flex justify-end">
+                        <input
+                          [id]="'price-' + item.id"
+                          type="text"
+                          inputmode="decimal"
+                          placeholder="0.00"
+                          [ngModel]="item.unitPriceInput"
+                          (ngModelChange)="updateItemPrice(i, $event)"
+                          (keydown)="onPriceKeydown($event)"
+                          [disabled]="!!successMessage()"
+                          class="w-28 rounded-citri-sm border border-citri-gray-300 bg-white px-3 py-1.5 text-sm text-right text-citri-gray-900 placeholder:text-citri-gray-600 focus:border-citri-green focus:outline-none focus:ring-2 focus:ring-citri-green/30 disabled:opacity-50"
+                        />
+                      </div>
+                    </td>
+                    <td class="py-4 text-right font-semibold text-citri-gray-900 align-middle whitespace-nowrap">
+                      {{ formatCurrency(lineSubtotal(item)) }}
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </section>
+
+      <!-- ── Shipping + summary ─────────────────────────────────────────── -->
+      <section class="bg-white rounded-citri-lg shadow-citri-card p-6">
+        <h2 class="font-citri-sans font-bold text-citri-gray-900 text-base mb-5 flex items-center gap-2">
+          <span class="w-7 h-7 rounded-citri-md bg-orange-50 flex items-center justify-center shrink-0">
+            <svg class="w-4 h-4 text-citri-orange" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
+            </svg>
+          </span>
+          Gastos de envío y resumen
+        </h2>
+
+        <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-6">
+
+          <!-- Shipping input -->
+          <div class="sm:w-56">
+            <label for="shipping-cost" class="block text-xs font-semibold uppercase tracking-wide text-citri-gray-600 mb-1.5">
+              Coste de envío (€)
+            </label>
+            <input
+              id="shipping-cost"
+              type="text"
+              inputmode="decimal"
+              placeholder="0,00"
+              [ngModel]="shippingInput()"
+              (ngModelChange)="shippingInput.set($event)"
+              (keydown)="onPriceKeydown($event)"
+              [disabled]="!!successMessage()"
+              class="w-full rounded-citri-sm border border-citri-gray-300 bg-white px-3 py-2 text-sm text-citri-gray-900 placeholder:text-citri-gray-600 focus:border-citri-green focus:outline-none focus:ring-2 focus:ring-citri-green/30 disabled:opacity-50"
+            />
+          </div>
+
+          <!-- Summary -->
+          <div class="flex-1 sm:max-w-xs sm:ml-auto">
+            <div class="rounded-citri-md border border-citri-gray-300 overflow-hidden">
+              <div class="flex justify-between items-center px-4 py-3 border-b border-citri-gray-100">
+                <span class="text-sm text-citri-gray-600">Subtotal productos</span>
+                <span class="text-sm font-semibold text-citri-gray-900">{{ formatCurrency(productsSubtotal()) }}</span>
+              </div>
+              <div class="flex justify-between items-center px-4 py-3 border-b border-citri-gray-100">
+                <span class="text-sm text-citri-gray-600">Gastos de envío</span>
+                <span class="text-sm font-semibold text-citri-gray-900">{{ formatCurrency(shippingCost()) }}</span>
+              </div>
+              <div class="flex justify-between items-center px-4 py-3.5 bg-citri-green-light">
+                <span class="text-sm font-bold text-citri-green uppercase tracking-wide">Total</span>
+                <span class="text-lg font-bold text-citri-green">{{ formatCurrency(total()) }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Validation errors ──────────────────────────────────────────── -->
+      @if (validationErrors().length > 0 && !successMessage()) {
+        <div class="rounded-citri-sm bg-red-50 border border-red-200 px-4 py-3" role="alert" data-order-alert>
+          <p class="text-xs font-semibold text-red-700 uppercase tracking-wide mb-2">Corrige los siguientes errores:</p>
+          <ul class="list-disc list-inside space-y-1">
+            @for (err of validationErrors(); track err) {
+              <li class="text-sm text-red-700">{{ err }}</li>
+            }
+          </ul>
+        </div>
+      }
+
+      <!-- ── Submit error ───────────────────────────────────────────────── -->
+      @if (submitError()) {
+        <div class="rounded-citri-sm bg-red-50 border border-red-200 px-4 py-3" role="alert" data-order-alert>
+          <p class="text-red-700 text-sm">{{ submitError() }}</p>
+        </div>
+      }
+
+      <!-- ── Submit button ──────────────────────────────────────────────── -->
+      @if (!successMessage() && !isShipped()) {
+        <div class="flex justify-end">
+          <button
+            type="button"
+            (click)="submit()"
+            [disabled]="!isValid() || isSubmitting()"
+            class="inline-flex items-center gap-2 rounded-citri-md bg-citri-green px-6 py-3 text-sm font-semibold text-white shadow-citri-card transition-all hover:bg-citri-green-dark focus:outline-none focus-visible:ring-2 focus-visible:ring-citri-green focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            @if (isSubmitting()) {
+              <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+              </svg>
+              Enviando...
+            } @else {
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+              </svg>
+              {{ submitButtonLabel() }}
+            }
+          </button>
+        </div>
+      }
+
+    }
+  </div>
+</div>

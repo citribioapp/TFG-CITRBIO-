@@ -1,0 +1,159 @@
+<div class="min-h-screen bg-citri-gray-50 flex flex-col">
+
+  <!-- ── Header ──────────────────────────────────────────────────────────── -->
+  <header class="bg-citri-green py-5 px-4 flex items-center justify-center">
+    <img [src]="logoUrl" alt="Citribio" class="h-10 w-auto" />
+    <span class="text-white font-citri-sans font-bold text-xl tracking-wide ml-3">Citribio</span>
+  </header>
+
+  <main class="flex-1 flex items-start justify-center px-4 py-10">
+    <div class="w-full max-w-lg">
+
+      <!-- ── Loading ─────────────────────────────────────────────────────── -->
+      @if (isLoading()) {
+        <div class="bg-white rounded-citri-lg shadow-citri-card p-8 text-center">
+          <svg class="w-8 h-8 animate-spin text-citri-green mx-auto mb-3" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+          </svg>
+          <p class="text-sm text-citri-gray-600">Cargando información del pedido...</p>
+        </div>
+      }
+
+      <!-- ── Invalid token ───────────────────────────────────────────────── -->
+      @if (!isLoading() && tokenError()) {
+        <div class="bg-white rounded-citri-lg shadow-citri-card p-8 text-center">
+          <div class="w-14 h-14 rounded-full bg-red-50 flex items-center justify-center mx-auto mb-4">
+            <svg class="w-7 h-7 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+            </svg>
+          </div>
+          <h1 class="font-citri-sans font-bold text-citri-gray-900 text-xl mb-2">Enlace no válido</h1>
+          <p class="text-sm text-citri-gray-600 leading-relaxed">
+            Este enlace no es válido o ha caducado. Si crees que es un error, contacta con Citribio.
+          </p>
+        </div>
+      }
+
+      <!-- ── Success ─────────────────────────────────────────────────────── -->
+      @if (!isLoading() && !tokenError() && submitted()) {
+        <div class="bg-white rounded-citri-lg shadow-citri-card p-8 text-center">
+          <div class="w-14 h-14 rounded-full bg-citri-green-light flex items-center justify-center mx-auto mb-4">
+            <svg class="w-7 h-7 text-citri-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h1 class="font-citri-sans font-bold text-citri-gray-900 text-xl mb-3">¡Justificante recibido!</h1>
+          <p class="text-sm text-citri-gray-600 leading-relaxed">
+            Gracias. Hemos recibido tu justificante y avisaremos a Citribio para revisar el pago y preparar tu pedido.
+          </p>
+        </div>
+      }
+
+      <!-- ── Main form ───────────────────────────────────────────────────── -->
+      @if (!isLoading() && !tokenError() && !submitted() && summary()) {
+        <div class="space-y-5">
+
+          <!-- Title -->
+          <div>
+            <h1 class="font-citri-sans font-bold text-citri-gray-900 text-2xl">
+              Confirmar pago del pedido #{{ summary()!.orderId }}
+            </h1>
+            <p class="text-sm text-citri-gray-600 mt-1 leading-relaxed">
+              Sube el justificante de transferencia para que podamos revisar tu pago y preparar el pedido.
+            </p>
+          </div>
+
+          <!-- Order summary card -->
+          <div class="bg-white rounded-citri-lg shadow-citri-card p-5">
+            <h2 class="text-xs font-semibold uppercase tracking-wide text-citri-gray-600 mb-3">Resumen del pedido</h2>
+            <dl class="space-y-2 text-sm">
+              <div class="flex justify-between gap-4">
+                <dt class="text-citri-gray-600">Pedido</dt>
+                <dd class="font-semibold text-citri-gray-900">#{{ summary()!.orderId }}</dd>
+              </div>
+              <div class="flex justify-between gap-4">
+                <dt class="text-citri-gray-600">Cliente</dt>
+                <dd class="font-semibold text-citri-gray-900">{{ summary()!.customerName }}</dd>
+              </div>
+              <div class="flex justify-between gap-4 pt-2 border-t border-citri-gray-100">
+                <dt class="font-bold text-citri-gray-900">Total</dt>
+                <dd class="font-bold text-[#80ba1b] text-base">{{ formatCurrency(summary()!.totalPrice) }}</dd>
+              </div>
+              <div class="pt-2 border-t border-citri-gray-100">
+                <dt class="text-citri-gray-600 mb-1">Concepto de transferencia</dt>
+                <dd class="font-bold text-[#ff731d] text-sm break-words">{{ summary()!.transferReference }}</dd>
+              </div>
+            </dl>
+          </div>
+
+          <!-- Upload card -->
+          <div class="bg-white rounded-citri-lg shadow-citri-card p-5">
+            <h2 class="text-xs font-semibold uppercase tracking-wide text-citri-gray-600 mb-3">Justificante de pago</h2>
+
+            <label
+              for="proof-file"
+              class="flex flex-col items-center justify-center gap-2 w-full rounded-citri-md border-2 border-dashed border-citri-gray-300 bg-citri-gray-50 px-4 py-8 cursor-pointer hover:border-citri-green hover:bg-citri-green-light transition-colors"
+            >
+              <svg class="w-8 h-8 text-citri-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+              </svg>
+              @if (selectedFileName()) {
+                <span class="text-sm font-semibold text-citri-green">{{ selectedFileName() }}</span>
+                <span class="text-xs text-citri-gray-600">Haz clic para cambiar el archivo</span>
+              } @else {
+                <span class="text-sm font-semibold text-citri-gray-900">Seleccionar archivo</span>
+                <span class="text-xs text-citri-gray-600">PDF, JPG o PNG · máx. 5 MB</span>
+              }
+              <input
+                id="proof-file"
+                type="file"
+                accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png"
+                class="hidden"
+                (change)="onFileSelected($event)"
+              />
+            </label>
+
+            @if (fileError()) {
+              <p class="mt-2 text-sm text-red-600">{{ fileError() }}</p>
+            }
+
+            @if (submitError()) {
+              <div class="mt-3 rounded-citri-sm bg-red-50 border border-red-200 px-4 py-3">
+                <p class="text-sm text-red-700">{{ submitError() }}</p>
+              </div>
+            }
+
+            <button
+              type="button"
+              (click)="submit()"
+              [disabled]="isSubmitting() || !selectedFile()"
+              class="mt-4 w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-citri-green text-white font-semibold rounded-citri-md hover:bg-citri-green-dark transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              @if (isSubmitting()) {
+                <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                </svg>
+                Enviando...
+              } @else {
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+                </svg>
+                Enviar justificante
+              }
+            </button>
+          </div>
+
+        </div>
+      }
+
+    </div>
+  </main>
+
+  <!-- ── Footer ──────────────────────────────────────────────────────────── -->
+  <footer class="py-4 text-center text-xs text-citri-gray-600">
+    Citribio · Gestión de pedidos
+  </footer>
+
+</div>

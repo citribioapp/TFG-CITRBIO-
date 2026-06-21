@@ -1,0 +1,40 @@
+###> symfony ###
+/var/
+/vendor/
+/public/bundles/
+/config/preload.php
+/.env.local
+/.env.local.php
+/.env..local
+###< symfony ###
+
+###> doctrine ###
+/var/cache/
+/var/log/
+###< doctrine ###
+
+###> jwt ###
+/config/jwt/
+!/config/jwt/.gitignore
+###< jwt ###
+
+###> uploads ###
+/public/uploads/*
+!/public/uploads/.gitignore
+###< uploads ###
+
+###> node ###
+/node_modules/
+npm-debug.log
+yarn-error.log
+yarn-debug.log
+###< node ###
+
+###> vscode / idea ###
+.vscode/
+.idea/
+###< vscode / idea ###
+
+###> macOS ###
+.DS_Store
+###< macOS ###

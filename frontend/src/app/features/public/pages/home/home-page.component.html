@@ -1,0 +1,377 @@
+<!-- Sección 1: Hero -->
+<app-hero-banner
+  backgroundImage="/inicio3.webp"
+  title="FRUTAS CITRIBIO"
+  subtitle="El sabor de nuestra tierra"
+  [overlayOpacity]="0.55"
+/>
+
+<!-- Sección 2: Nosotros somos Frutas Citribio -->
+<section class="py-12 md:py-16 bg-citri-gray-50">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="grid grid-cols-1 gap-12 md:grid-cols-2 md:items-center">
+
+      <!-- Columna izquierda: texto -->
+      <div>
+        <p class="text-citri-green text-sm font-semibold uppercase tracking-wide mb-2">
+          Nosotros somos Frutas Citribio
+        </p>
+        <h2 class="font-citri-sans font-bold text-citri-gray-900 text-3xl md:text-4xl mb-3">
+          Pasión por nuestros cítricos
+        </h2>
+        <p class="text-citri-gray-600 text-base md:text-lg font-medium mb-5 leading-snug">
+          Desde nuestra finca en el corazón del Mediterráneo, cultivamos cítricos
+          con el cuidado y la dedicación que solo el origen puede garantizar. Cada fruto es el resultado
+          de años de experiencia y amor por la tierra.
+        </p>
+
+        <!-- Bloque de valor 1: Producción de origen -->
+        <div class="flex items-start gap-3 mb-3">
+          <div class="w-10 h-10 rounded-citri-md bg-citri-green-light flex items-center justify-center shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-citri-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <!-- Location pin -->
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 2C8.686 2 6 4.686 6 8c0 4.5 6 12 6 12s6-7.5 6-12c0-3.314-2.686-6-6-6z" />
+              <!-- Leaf inside pin -->
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6c0 0-2 1.5-2 3s2 2 2 2 2-.5 2-2-2-3-2-3z" />
+            </svg>
+          </div>
+          <div>
+            <p class="font-semibold text-citri-gray-900">Producción de origen</p>
+            <p class="text-sm text-citri-gray-600">Cultivamos directamente en nuestra finca mediterránea, garantizando la trazabilidad completa de cada fruto.</p>
+          </div>
+        </div>
+
+        <!-- Bloque de valor 2: Compromiso con la calidad -->
+        <div class="flex items-start gap-3 mb-3">
+          <div class="w-10 h-10 rounded-citri-md bg-citri-green-light flex items-center justify-center shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-citri-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+            </svg>
+          </div>
+          <div>
+            <p class="font-semibold text-citri-gray-900">Compromiso con la calidad</p>
+            <p class="text-sm text-citri-gray-600">Cada pieza pasa por un riguroso control de calidad antes de llegar a tu mesa, asegurando el mejor sabor.</p>
+          </div>
+        </div>
+
+        <!-- CTA -->
+        <a routerLink="/nosotros" class="inline-flex items-center gap-2 px-6 py-3 bg-citri-green text-white font-semibold rounded-citri-md hover:bg-citri-green-dark transition-colors duration-200 mt-2">
+          Saber más sobre nosotros
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+          </svg>
+        </a>
+      </div>
+
+      <!-- Columna derecha: imagen -->
+      <div>
+        <div class="aspect-[3/2] overflow-hidden rounded-citri-lg shadow-citri-card">
+          <img
+            src="/campo.webp"
+            alt="Finca Citribio"
+            width="600"
+            height="400"
+            class="w-full h-full object-cover"
+          >
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Sección 3: Nuestros Productos -->
+<section class="py-12 md:py-16 bg-white">
+  <div class="max-w-7xl mx-auto px-4">
+
+    <!-- Header de sección -->
+    <div class="grid grid-cols-1 gap-10 md:grid-cols-2 md:items-center mb-12">
+      <div>
+        <p class="text-citri-green text-sm font-semibold uppercase tracking-wide mb-2">Lo que cultivamos</p>
+        <h2 class="font-citri-sans font-bold text-citri-gray-900 text-3xl md:text-4xl">
+          Nuestros Productos
+        </h2>
+      </div>
+      <div>
+        <p class="text-citri-gray-600 text-base md:text-lg font-medium leading-snug">
+          Descubre nuestros cítricos de alta calidad, cultivados con cuidado y seleccionados
+          para ofrecer el mejor sabor en cada temporada.
+        </p>
+      </div>
+    </div>
+
+    <!-- Fila 1: 3 tarjetas de fruta -->
+    <div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
+
+      <!-- Tarjeta: Limones -->
+      <div class="group relative overflow-hidden rounded-citri-lg shadow-citri-card bg-citri-gray-50 hover:shadow-lg transition-shadow duration-300">
+        <div class="aspect-[4/3] overflow-hidden bg-citri-yellow-light">
+          <img src="/limones.jpg" alt="Limones Citribio" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+        </div>
+        <div class="p-5">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="w-2 h-2 rounded-full bg-citri-yellow inline-block"></span>
+            <span class="text-xs font-semibold uppercase tracking-wide text-citri-gray-600">Cítrico</span>
+          </div>
+          <h3 class="font-citri-sans font-bold text-citri-gray-900 text-lg mb-1">Limones</h3>
+          <p class="text-citri-gray-600 text-sm leading-snug">Limones frescos de primera calidad, con un aroma intenso y un sabor equilibrado entre acidez y frescura.</p>
+        </div>
+      </div>
+
+      <!-- Tarjeta: Naranjas -->
+      <div class="group relative overflow-hidden rounded-citri-lg shadow-citri-card bg-citri-gray-50 hover:shadow-lg transition-shadow duration-300">
+        <div class="aspect-[4/3] overflow-hidden bg-citri-yellow-light">
+          <img src="/naranjas.jpg" alt="Naranjas Citribio" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+        </div>
+        <div class="p-5">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="w-2 h-2 rounded-full bg-citri-yellow inline-block"></span>
+            <span class="text-xs font-semibold uppercase tracking-wide text-citri-gray-600">Cítrico</span>
+          </div>
+          <h3 class="font-citri-sans font-bold text-citri-gray-900 text-lg mb-1">Naranjas</h3>
+          <p class="text-citri-gray-600 text-sm leading-snug">Naranjas dulces y jugosas, perfectas para zumo o consumo directo. Recogidas en su punto óptimo de maduración.</p>
+        </div>
+      </div>
+
+      <!-- Tarjeta: Mandarinas -->
+      <div class="group relative overflow-hidden rounded-citri-lg shadow-citri-card bg-citri-gray-50 hover:shadow-lg transition-shadow duration-300">
+        <div class="aspect-[4/3] overflow-hidden bg-citri-yellow-light">
+          <img src="/mandarinas.jpg" alt="Mandarinas Citribio" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+        </div>
+        <div class="p-5">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="w-2 h-2 rounded-full bg-citri-orange inline-block"></span>
+            <span class="text-xs font-semibold uppercase tracking-wide text-citri-gray-600">Cítrico</span>
+          </div>
+          <h3 class="font-citri-sans font-bold text-citri-gray-900 text-lg mb-1">Mandarinas</h3>
+          <p class="text-citri-gray-600 text-sm leading-snug">Mandarinas de piel fina y fácil pelado, con un dulzor natural y un aroma cítrico inconfundible.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Fila 2: Embalaje — ancho completo -->
+    <div class="mt-6 group relative overflow-hidden rounded-citri-lg shadow-citri-card bg-citri-green-light hover:shadow-lg transition-shadow duration-300">
+      <div class="grid grid-cols-1 md:grid-cols-2 md:items-center">
+        <div class="aspect-[16/7] md:aspect-auto md:h-52 overflow-hidden">
+          <img src="/embalaje.jpg" alt="Embalaje ecológico Citribio" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+        </div>
+        <div class="p-6 md:p-8">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="w-2 h-2 rounded-full bg-citri-green inline-block"></span>
+            <span class="text-xs font-semibold uppercase tracking-wide text-citri-gray-600">Sostenibilidad</span>
+          </div>
+          <h3 class="font-citri-sans font-bold text-citri-gray-900 text-xl mb-2">Embalaje Ecológico</h3>
+          <p class="text-citri-gray-600 text-sm leading-snug">Embalaje 100% reciclable y biodegradable. Cada caja está diseñada para proteger el producto y minimizar el impacto ambiental en cada envío.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA Comprar productos -->
+    <div class="mt-10 text-center">
+      <a
+        routerLink="/productos"
+        class="inline-flex items-center gap-2 px-8 py-3.5 bg-citri-green text-white font-semibold rounded-citri-md hover:bg-citri-green-dark transition-colors duration-200 text-base"
+      >
+        Comprar productos
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+        </svg>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- Sección 4: Calibres y Calidades (preview) -->
+<section class="py-12 md:py-16 bg-citri-gray-50">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="grid grid-cols-1 gap-2 md:gap-10 md:grid-cols-2 md:items-center">
+      <div>
+        <p class="text-citri-green text-sm font-semibold uppercase tracking-wide mb-2">Clasificación</p>
+        <h2 class="font-citri-sans font-bold text-citri-gray-900 text-3xl md:text-4xl mb-3">Calibres y Calidades</h2>
+        <p class="text-citri-gray-600 text-base md:text-lg font-medium leading-snug mb-3 md:mb-5">
+          Cada cítrico se clasifica por calibre (tamaño) y calidad (aspecto exterior). Conocer esta clasificación te ayuda a elegir el producto más adecuado para cada uso.
+        </p>
+        <a routerLink="/productos" fragment="clasificacion-calibres" class="hidden md:inline-flex items-center gap-2 text-citri-green font-semibold text-sm hover:gap-3 transition-all duration-200 group">
+          Ver clasificación completa
+          <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+          </svg>
+        </a>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <!-- Calibres -->
+        <div class="bg-white rounded-citri-lg shadow-citri-card p-5">
+          <div class="w-10 h-10 rounded-citri-md bg-citri-green-light flex items-center justify-center mb-3">
+            <svg class="w-5 h-5 text-citri-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3" /><circle cx="12" cy="12" r="7" /><circle cx="12" cy="12" r="10" />
+            </svg>
+          </div>
+          <h3 class="font-semibold text-citri-gray-900 text-base mb-1">Calibre</h3>
+          <p class="text-citri-gray-600 text-sm leading-snug">Indica el tamaño del fruto. Va del 0 (mayor) al 9 (menor). Afecta al rendimiento y uso final.</p>
+        </div>
+        <!-- Calidades -->
+        <div class="bg-white rounded-citri-lg shadow-citri-card p-5">
+          <div class="w-10 h-10 rounded-citri-md bg-citri-green-light flex items-center justify-center mb-3">
+            <svg class="w-5 h-5 text-citri-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118L2.98 10.1c-.783-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+            </svg>
+          </div>
+          <h3 class="font-semibold text-citri-gray-900 text-base mb-1">Calidad</h3>
+          <p class="text-citri-gray-600 text-sm leading-snug">Clasifica el aspecto exterior: I Extra, Primera, I Standar, Standar y Segunda. No afecta al sabor ni al valor nutricional.</p>
+        </div>
+      </div>
+      <!-- Button: mobile only, below the cards -->
+      <a routerLink="/productos" fragment="clasificacion-calibres" class="md:hidden inline-flex items-center gap-2 text-citri-green font-semibold text-sm group mt-4">
+        Ver clasificación completa
+        <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Sección: Calendario de cítricos (promo) -->
+<section class="py-12 md:py-16 bg-white">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="bg-citri-green-light rounded-citri-lg shadow-citri-card p-8 md:p-10 text-center">
+      <div class="max-w-2xl mx-auto">
+        <div class="w-14 h-14 mx-auto mb-4 rounded-citri-full bg-citri-green flex items-center justify-center">
+          <svg class="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+        </div>
+        <h2 class="font-citri-sans font-bold text-citri-gray-900 text-2xl md:text-3xl mb-3">Calendario de <span class="text-citri-green">Cítricos</span></h2>
+        <p class="text-citri-gray-600 text-base md:text-lg font-medium leading-snug mb-6">
+          Consulta cuándo está disponible cada variedad de limón, naranja y mandarina según su temporada de recolección.
+        </p>
+        <a
+          routerLink="/productos"
+          fragment="calendario-limones"
+          class="inline-flex items-center gap-2 px-6 py-3 bg-citri-green text-white font-semibold rounded-citri-md hover:bg-citri-green-dark transition-colors duration-200 text-sm"
+        >
+          Ver calendario
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Sección 5: Grupo Citribio — Nuestras Marcas -->
+<section class="py-12 md:py-16 bg-white">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="text-center mb-10">
+      <p class="text-citri-green text-sm font-semibold uppercase tracking-wide mb-2">Grupo Citribio</p>
+      <h2 class="font-citri-sans font-bold text-citri-gray-900 text-3xl md:text-4xl">Nuestras Marcas</h2>
+    </div>
+    <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
+
+      <!-- Ross Mediterranean -->
+      <div class="group bg-citri-gray-50 rounded-citri-lg shadow-citri-card overflow-hidden hover:shadow-lg transition-shadow duration-300">
+        <div class="flex items-center justify-center h-62 md:h-70 bg-white px-4 py-3">
+          <img src="/Ross1.png" alt="Ross Mediterranean" class="max-h-full max-w-full object-contain" />
+        </div>
+        <div class="p-6">
+          <span class="inline-block mb-3 px-3 py-1 bg-citri-green-light text-citri-green text-xs font-semibold rounded-citri-full uppercase tracking-wide">Mercado internacional</span>
+          <h3 class="font-citri-sans font-bold text-citri-gray-900 text-xl mb-2">Ross Mediterranean</h3>
+          <p class="text-citri-gray-600 text-sm leading-snug">Nuestra marca premium orientada al mercado internacional. Seleccionamos los mejores cítricos de la finca para ofrecer una experiencia de sabor mediterráneo auténtico en los mercados más exigentes de Europa y Asia.</p>
+        </div>
+      </div>
+
+      <!-- El Artesano -->
+      <div class="group bg-citri-gray-50 rounded-citri-lg shadow-citri-card overflow-hidden hover:shadow-lg transition-shadow duration-300">
+        <div class="flex items-center justify-center h-62 md:h-70 bg-white px-4 py-3">
+          <img src="/Artesano.png" alt="El Artesano" class="max-h-full max-w-full object-contain" />
+        </div>
+        <div class="p-6">
+          <span class="inline-block mb-3 px-3 py-1 bg-citri-green-light text-citri-green text-xs font-semibold rounded-citri-full uppercase tracking-wide">Mercado nacional</span>
+          <h3 class="font-citri-sans font-bold text-citri-gray-900 text-xl mb-2">El Artesano</h3>
+          <p class="text-citri-gray-600 text-sm leading-snug">Nuestra línea artesanal para quienes valoran el producto local y la tradición. Cítricos cultivados con métodos tradicionales, recogidos a mano y distribuidos en el mercado nacional con el sello de calidad Citribio.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Sección 6: Nuestro Compromiso -->
+<section class="py-12 md:py-16 bg-citri-gray-50 overflow-hidden">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="grid grid-cols-1 gap-12 md:grid-cols-2 md:items-center">
+
+      <!-- Columna izquierda: texto -->
+      <div class="order-1 md:order-1">
+        <p class="text-citri-green text-sm font-semibold uppercase tracking-wide mb-2">Calidad garantizada</p>
+        <h2 class="font-citri-sans font-bold text-citri-gray-900 text-3xl md:text-4xl mb-3">
+          Nuestro Compromiso
+        </h2>
+        <p class="text-citri-gray-600 text-base md:text-lg font-medium leading-snug mb-5">
+          Trabajamos con altos estándares de calidad para garantizar productos frescos, naturales y de confianza.
+          Cada cítrico que llega a tu mesa ha pasado por un riguroso proceso de selección, desde el cultivo
+          hasta el embalaje, respetando el medio ambiente y la tradición agrícola mediterránea.
+        </p>
+
+        <!-- Tres pilares -->
+        <div class="space-y-3 mb-6">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-citri-full bg-citri-green flex items-center justify-center shrink-0">
+              <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <span class="text-citri-gray-700 font-medium text-sm">Selección manual en origen</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-citri-full bg-citri-green flex items-center justify-center shrink-0">
+              <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <span class="text-citri-gray-700 font-medium text-sm">Sin conservantes ni tratamientos artificiales</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-citri-full bg-citri-green flex items-center justify-center shrink-0">
+              <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <span class="text-citri-gray-700 font-medium text-sm">Embalaje sostenible y trazabilidad completa</span>
+          </div>
+        </div>
+
+        <!-- CTA Contáctanos -->
+        <a
+          routerLink="/contacto"
+          class="inline-flex items-center gap-2 text-citri-green font-semibold text-base hover:gap-3 transition-all duration-200 group"
+        >
+          Contáctanos
+          <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+          </svg>
+        </a>
+      </div>
+
+      <!-- Columna derecha: imagen con fondo decorativo -->
+      <div class="order-2 md:order-2 flex items-center justify-center">
+        <div class="relative w-full max-w-md mx-auto">
+          <!-- Fondo decorativo amarillo -->
+          <div class="absolute -bottom-4 -right-4 w-4/5 h-4/5 rounded-citri-lg bg-citri-yellow-light -z-10"></div>
+          <!-- Fondo decorativo verde -->
+          <div class="absolute -top-4 -left-4 w-1/2 h-1/2 rounded-citri-full bg-citri-green-light -z-10 opacity-60"></div>
+          <!-- Imagen principal -->
+          <img
+            src="/EcoCitribio.png"
+            alt="Compromiso Citribio con la calidad"
+            class="relative rounded-citri-lg w-full object-cover shadow-citri-card aspect-square"
+          />
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>

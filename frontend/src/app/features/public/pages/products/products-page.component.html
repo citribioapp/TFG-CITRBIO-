@@ -1,0 +1,445 @@
+<div class="min-h-screen bg-citri-gray-50">
+  <!-- Header de página -->
+  <div class="bg-citri-green py-12 md:py-16">
+    <div class="max-w-7xl mx-auto px-4 text-center">
+      <h1 class="font-citri-sans font-bold text-white text-3xl md:text-4xl uppercase tracking-wide">Productos</h1>
+      <p class="text-white/80 mt-2 text-base md:text-lg">Cítricos de origen mediterráneo</p>
+    </div>
+  </div>
+
+  <div id="productos-section" class="max-w-7xl mx-auto px-4 py-10">
+    <!-- Estado de error -->
+    @if (errorMessage()) {
+      <div class="rounded-citri-md bg-red-50 border border-red-200 p-6 text-center">
+        <p class="text-red-700 font-medium">{{ errorMessage() }}</p>
+      </div>
+    }
+
+    <!-- Estado de carga (skeleton) -->
+    @if (isLoading()) {
+      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <!-- Category nav placeholder — same height as the real nav to prevent layout shift -->
+        <div class="col-span-full h-[52px] bg-white rounded-citri-lg shadow-citri-card animate-pulse mb-0"></div>
+        @for (item of placeholders; track item) {
+          <div class="rounded-citri-md bg-white shadow-citri-card overflow-hidden animate-pulse">
+            <div class="aspect-[4/3] bg-citri-gray-100"></div>
+            <div class="p-4">
+              <div class="h-4 bg-citri-gray-100 rounded mb-2 w-3/4"></div>
+              <div class="h-3 bg-citri-gray-100 rounded mb-1"></div>
+              <div class="h-3 bg-citri-gray-100 rounded w-1/2"></div>
+            </div>
+          </div>
+        }
+      </div>
+
+    <!-- Sin categorías -->
+    } @else if (categories().length === 0) {
+      <div class="text-center py-12">
+        <p class="text-citri-gray-600">Todavía no hay categorías activas.</p>
+      </div>
+
+    <!-- Contenido cargado -->
+    } @else {
+      <!-- Anchor for back-navigation scroll target — sits above the category tabs -->
+      <div id="productos-categorias-tabs" class="scroll-mt-[100px]"></div>
+
+      <!-- Category selector -->
+      <nav class="bg-white rounded-citri-lg shadow-citri-card p-1.5 mb-4 overflow-x-auto">
+        <div #categoryCarousel class="flex gap-1">
+          @for (category of categories(); track category.id) {
+            <button
+              type="button"
+              (click)="selectCategory(category.id)"
+              class="shrink-0 w-28 sm:flex-1 flex items-center justify-center px-3 sm:px-4 py-2.5 rounded-citri-md text-sm font-semibold transition-all duration-200 whitespace-nowrap"
+              [ngClass]="{
+                'bg-citri-green text-white shadow-sm': selectedCategoryId() === category.id,
+                'text-citri-gray-600 hover:text-citri-green hover:bg-citri-green-light': selectedCategoryId() !== category.id
+              }"
+            >
+              {{ category.name }}
+            </button>
+          }
+        </div>
+      </nav>
+
+      <!-- Search input -->
+      <div class="relative mb-6">
+        <label for="product-search" class="sr-only">Buscar producto o variedad</label>
+        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5">
+          <svg class="h-4 w-4 text-citri-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
+          </svg>
+        </div>
+        <input
+          #searchInputRef
+          id="product-search"
+          type="text"
+          autocomplete="off"
+          placeholder="Buscar producto o variedad..."
+          (input)="onSearchInput($event)"
+          class="w-full rounded-citri-lg border border-citri-gray-300 bg-white py-2.5 pl-10 pr-10 text-sm text-citri-gray-900 placeholder-citri-gray-600 shadow-citri-card focus:border-citri-green focus:outline-none focus:ring-2 focus:ring-citri-green/20 transition-colors"
+        />
+        @if (searchQuery()) {
+          <button
+            type="button"
+            (click)="clearSearch()"
+            aria-label="Limpiar búsqueda"
+            class="absolute inset-y-0 right-0 flex items-center pr-3.5 text-citri-gray-600 hover:text-citri-gray-900 transition-colors"
+          >
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        }
+      </div>
+
+      <!-- ── GLOBAL SEARCH RESULTS (shown when search is active) ──────── -->
+      @if (isSearchActive()) {
+        <div>
+          @if (globalSearchResults().length === 0) {
+            <div class="flex flex-col items-center justify-center gap-3 rounded-citri-lg bg-white py-14 px-6 text-center shadow-citri-card">
+              <svg class="h-10 w-10 text-citri-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
+              </svg>
+              <p class="text-sm font-medium text-citri-gray-600">
+                No se encontraron productos con esa búsqueda.
+              </p>
+              <button
+                type="button"
+                (click)="clearSearch()"
+                class="text-sm font-semibold text-citri-green hover:underline underline-offset-2"
+              >
+                Limpiar búsqueda
+              </button>
+            </div>
+          } @else {
+            <p class="text-xs text-citri-gray-500 mb-4">
+              {{ globalSearchResults().length }} resultado{{ globalSearchResults().length === 1 ? '' : 's' }} en todas las categorías
+            </p>
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              @for (product of globalSearchResults(); track product.id) {
+                <app-product-card
+                  [name]="product.name"
+                  [description]="product.description"
+                  [image]="product.image ? resolveImageUrl(product.image) : null"
+                  [productId]="product.id"
+                  [categorySlug]="product.categorySlug"
+                  [isOutOfSeason]="product.isOutOfSeason"
+                />
+              }
+            </div>
+          }
+        </div>
+
+      <!-- ── CATEGORY VIEW (shown when search is empty) ─────────────────── -->
+      } @else {
+      <!-- Categoría seleccionada: productos -->
+      @if (selectedCategory(); as activeCategory) {
+        <div>
+          <div class="mb-6 scroll-mt-[88px]" [id]="'categoria-' + activeCategory.slug">
+            <h2 class="font-citri-sans font-bold text-citri-gray-900 text-2xl">{{ activeCategory.name }}</h2>
+            @if (activeCategory.description) {
+              <p class="text-citri-gray-600 mt-1">{{ activeCategory.description }}</p>
+            }
+          </div>
+
+          @if (activeCategory.products.length === 0) {
+            <div class="text-center py-12 bg-white rounded-citri-md">
+              <p class="text-citri-gray-600">Esta categoría todavía no tiene productos activos.</p>
+            </div>
+          } @else {
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              @for (product of filteredProducts(); track product.id) {
+                <app-product-card
+                  [name]="product.name"
+                  [description]="product.description"
+                  [image]="product.image ? resolveImageUrl(product.image) : null"
+                  [productId]="product.id"
+                  [categorySlug]="activeCategory.slug"
+                  [isOutOfSeason]="product.isOutOfSeason"
+                />
+              }
+            </div>
+            @if (filteredProducts().length === 0) {
+              <div class="mt-2 flex flex-col items-center justify-center gap-3 rounded-citri-lg bg-white py-14 px-6 text-center shadow-citri-card">
+                <svg class="h-10 w-10 text-citri-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
+                </svg>
+                <p class="text-sm font-medium text-citri-gray-600">
+                  No se encontraron productos en <span class="font-semibold text-citri-gray-900">{{ activeCategory.name }}</span> con esa búsqueda.
+                </p>
+                <button
+                  type="button"
+                  (click)="clearSearch()"
+                  class="text-sm font-semibold text-citri-green hover:underline underline-offset-2"
+                >
+                  Limpiar búsqueda
+                </button>
+              </div>
+            }
+          }
+
+          <!-- Calendario de cosecha (si existe para esta categoría) -->
+          @if (activeCalendar(); as calendar) {
+            <!-- Anchor for product-detail season CTA: /productos#temporada-{slug} -->
+            <div [id]="'temporada-' + calendar.categorySlug" class="scroll-mt-[88px]"></div>
+            <div class="mt-10 scroll-mt-[88px]" [id]="'calendario-' + calendar.categorySlug">
+              <div class="mb-4">
+                <p class="text-citri-green text-xs font-semibold uppercase tracking-wide mb-1">Temporada</p>
+                <h3 class="font-citri-sans font-bold text-citri-gray-900 text-xl">{{ calendar.title }}</h3>
+                <p class="text-citri-gray-600 text-sm mt-1">Los meses resaltados indican el período de cosecha de cada variedad.</p>
+              </div>
+              <div class="overflow-x-auto rounded-citri-lg shadow-citri-card bg-white relative">
+                <table class="w-full text-xs md:text-sm min-w-[600px]">
+                  <thead>
+                    <tr class="bg-citri-green text-white">
+                      <th class="sticky left-0 z-20 bg-citri-green px-3 md:px-4 py-3 text-left font-semibold w-32 md:w-40">Variedad</th>
+                      @for (month of months; track month) {
+                        <th class="px-1 md:px-2 py-3 text-center font-semibold">{{ month }}</th>
+                      }
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (variety of calendar.varieties; track variety.name; let r = $index) {
+                      <tr class="border-b border-citri-gray-100 last:border-0">
+                        <td class="sticky left-0 z-10 px-3 md:px-4 py-3 font-semibold text-citri-gray-900 whitespace-nowrap"
+                            [style.background-color]="r % 2 !== 0 ? '#f4faea' : '#ffffff'">{{ variety.name }}</td>
+                        @for (month of months; track month; let i = $index) {
+                          <td class="px-1 md:px-2 py-3 text-center"
+                              [style.background-color]="r % 2 !== 0 ? '#f4faea' : '#ffffff'">
+                            @if (isMonthActive(variety, i)) {
+                              <span class="inline-block w-5 h-5 md:w-6 md:h-6 rounded-full bg-citri-green" title="{{ month }} — temporada activa" aria-label="{{ month }} activo"></span>
+                            } @else {
+                              <span class="inline-block w-5 h-5 md:w-6 md:h-6 rounded-full" style="background-color:#cfd5dd" aria-label="{{ month }} inactivo"></span>
+                            }
+                          </td>
+                        }
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+              <!-- Leyenda -->
+              <div class="mt-3 flex items-center gap-4 text-xs text-citri-gray-600">
+                <span class="flex items-center gap-1.5">
+                  <span class="inline-block w-3 h-3 rounded-full bg-citri-green"></span>
+                  Temporada activa
+                </span>
+                <span class="flex items-center gap-1.5">
+                  <span class="inline-block w-3 h-3 rounded-full" style="background-color:#cfd5dd"></span>
+                  Fuera de temporada
+                </span>
+              </div>
+            </div>
+          }
+        </div>
+      }
+      } <!-- end @else (search inactive) -->
+    }
+  </div>
+
+  <!-- Sección: Calibres y Calidades -->
+  <div id="clasificacion-calibres" class="bg-white py-12 md:py-16 mt-4 scroll-mt-[88px]">
+    <div class="max-w-7xl mx-auto px-4">
+
+      <!-- Título y descripción -->
+      <div class="mb-8">
+        <p class="text-citri-green text-sm font-semibold uppercase tracking-wide mb-2">Clasificación oficial</p>
+        <h2 class="font-citri-sans font-bold text-citri-gray-900 text-2xl md:text-3xl mb-3">Guía de calibres y calidades de cítricos</h2>
+        <p class="text-citri-gray-600 text-base md:text-lg font-medium leading-snug max-w-2xl">
+          La calidad se clasifica por el aspecto exterior del citrico. <br>
+          El calibre indica el tamaño del fruto según su diámetro ecuatorial en milímetros, conforme a la normativa europea de clasificación de cítricos. A mayor número de calibre, menor tamaño del fruto.
+        </p>
+      </div>
+
+      <!-- Categorías de calidad -->
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 mb-10">
+
+        <!-- I Extra — green -->
+        <div class="bg-[#f1f8f4] rounded-citri-lg p-5 border-l-4 border-[#2e7d32]">
+          <h3 class="font-semibold text-citri-gray-900 mb-1">Calidad I Extra</h3>
+          <p class="text-citri-gray-600 text-sm leading-snug">Fruta de máxima calidad. Sin defectos visibles, excelente color, forma uniforme y sin marcas. Selección premium para venta directa.</p>
+        </div>
+
+        <!-- Primera — light green -->
+        <div class="bg-[#f6fbf7] rounded-citri-lg p-5 border-l-4 border-[#6fbf73]">
+          <h3 class="font-semibold text-citri-gray-900 mb-1">Calidad Primera</h3>
+          <p class="text-citri-gray-600 text-sm leading-snug">Fruta de alta calidad con ligeras imperfecciones visuales. Mantiene buen aspecto, sabor y frescura.</p>
+        </div>
+
+        <!-- I Standar — yellow -->
+        <div class="bg-[#fff8e1] rounded-citri-lg p-5 border-l-4 border-[#fbc02d]">
+          <div class="flex items-center gap-2 mb-1">
+            <h3 class="font-semibold text-citri-gray-900">Calidad I Standar</h3>
+            <!-- <span class="text-[10px] font-semibold px-1.5 py-0.5 bg-[#fbc02d]/20 text-[#7a5c00] rounded-citri-full whitespace-nowrap">≡ Primera</span> -->
+          </div>
+          <p class="text-citri-gray-600 text-sm leading-snug">Equivalente a "Primera". Calidad comercial estándar con pequeños defectos externos, pero apta para consumo con buen sabor.</p>
+        </div>
+
+        <!-- Standar — orange -->
+        <div class="bg-[#fff3e0] rounded-citri-lg p-5 border-l-4 border-[#f57c00]">
+          <h3 class="font-semibold text-citri-gray-900 mb-1">Calidad Standar</h3>
+          <p class="text-citri-gray-600 text-sm leading-snug">Calidad media. Puede presentar defectos visibles en piel o forma, pero mantiene condiciones adecuadas para consumo.</p>
+        </div>
+
+        <!-- Segunda — red -->
+        <div class="bg-[#fdecea] rounded-citri-lg p-5 border-l-4 border-[#d32f2f]">
+          <h3 class="font-semibold text-citri-gray-900 mb-1">Calidad Segunda</h3>
+          <p class="text-citri-gray-600 text-sm leading-snug">Fruta con defectos más evidentes en piel o forma. Se destina principalmente a industria o mercados menos exigentes.</p>
+        </div>
+
+      </div>
+
+      <!-- Tablas de calibres -->
+      <!-- Desktop (md+): always show all three in a 3-column grid.
+           Mobile: show only the table matching the selected category.
+           If no category matches, show a prompt. -->
+
+      <!-- Mobile-only: no-match hint when selected category has no caliber table -->
+      @if (activeCaliberSlug() === null) {
+        <div class="md:hidden mb-6 rounded-citri-lg bg-citri-gray-50 border border-citri-gray-200 px-5 py-4 text-center">
+          <p class="text-sm text-citri-gray-600">Selecciona una categoría arriba para ver su tabla de calibres.</p>
+        </div>
+      }
+
+      <div class="md:overflow-x-auto md:pb-2">
+        <div class="grid grid-cols-1 gap-5 md:grid-cols-3 md:min-w-[640px]">
+
+          <!-- LIMONES -->
+          <div class="rounded-citri-lg overflow-hidden shadow-citri-card md:block"
+               [class.hidden]="activeCaliberSlug() !== 'limones'">
+            <div class="bg-yellow-400 px-4 py-3.5 text-center">
+              <span class="text-yellow-900 font-citri-sans font-bold text-sm uppercase tracking-widest">Limones</span>
+            </div>
+            <div>
+              <div class="grid grid-cols-2 bg-yellow-100 px-4 py-2.5 border-b border-yellow-200">
+                <span class="text-xs font-bold text-yellow-900 text-center uppercase tracking-wide">Calibre</span>
+                <span class="text-xs font-bold text-yellow-900 text-center uppercase tracking-wide">Ø mm</span>
+              </div>
+              @for (row of limonesCalibers; track row.calibre; let even = $even) {
+                <div class="grid grid-cols-2 px-4 py-2.5 border-b border-yellow-100 last:border-0 transition-colors"
+                     [class.bg-yellow-50]="even" [class.bg-white]="!even">
+                  <span class="text-sm font-bold text-yellow-600 text-center">{{ row.calibre }}</span>
+                  <span class="text-sm text-gray-700 text-center">{{ row.diametro }}</span>
+                </div>
+              }
+            </div>
+          </div>
+
+          <!-- MANDARINAS Y CLEMENTINAS -->
+          <div class="rounded-citri-lg overflow-hidden shadow-citri-card md:block"
+               [class.hidden]="activeCaliberSlug() !== 'mandarinas'">
+            <div class="bg-orange-400 px-4 py-3.5 text-center">
+              <span class="text-white font-citri-sans font-bold text-sm uppercase tracking-widest">Mandarinas</span>
+            </div>
+            <div>
+              <div class="grid grid-cols-2 bg-orange-100 px-4 py-2.5 border-b border-orange-200">
+                <span class="text-xs font-bold text-orange-900 text-center uppercase tracking-wide">Calibre</span>
+                <span class="text-xs font-bold text-orange-900 text-center uppercase tracking-wide">Ø mm</span>
+              </div>
+              @for (row of mandarinasCalibers; track row.calibre; let even = $even) {
+                <div class="grid grid-cols-2 px-4 py-2.5 border-b border-orange-100 last:border-0 transition-colors"
+                     [class.bg-orange-50]="even" [class.bg-white]="!even">
+                  <span class="text-sm font-bold text-orange-500 text-center">{{ row.calibre }}</span>
+                  <span class="text-sm text-gray-700 text-center">{{ row.diametro }}</span>
+                </div>
+              }
+            </div>
+          </div>
+
+          <!-- NARANJAS -->
+          <div class="rounded-citri-lg overflow-hidden shadow-citri-card md:block"
+               [class.hidden]="activeCaliberSlug() !== 'naranjas'">
+            <div class="bg-orange-500 px-4 py-3.5 text-center">
+              <span class="text-white font-citri-sans font-bold text-sm uppercase tracking-widest">Naranjas</span>
+            </div>
+            <div>
+              <div class="grid grid-cols-2 bg-orange-100 px-4 py-2.5 border-b border-orange-200">
+                <span class="text-xs font-bold text-orange-900 text-center uppercase tracking-wide">Calibre</span>
+                <span class="text-xs font-bold text-orange-900 text-center uppercase tracking-wide">Ø mm</span>
+              </div>
+              @for (row of naranjasCalibers; track row.calibre; let even = $even) {
+                <div class="grid grid-cols-2 px-4 py-2.5 border-b border-orange-100 last:border-0 transition-colors"
+                     [class.bg-orange-50]="even" [class.bg-white]="!even">
+                  <span class="text-sm font-bold text-orange-600 text-center">{{ row.calibre }}</span>
+                  <span class="text-sm text-gray-700 text-center">{{ row.diametro }}</span>
+                </div>
+              }
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <p class="text-xs text-citri-gray-600 mt-4">* Calibres según normativa europea de clasificación de cítricos (Reglamento CE 1799/2001 y modificaciones posteriores).</p>
+
+      <!-- Promo: Calendario de cítricos -->
+      <div class="mt-10 bg-citri-green-light rounded-citri-lg shadow-citri-card p-6 md:p-8 text-center">
+        <div class="max-w-xl mx-auto">
+          <div class="w-12 h-12 mx-auto mb-3 rounded-citri-full bg-citri-green flex items-center justify-center">
+            <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+          </div>
+          <h3 class="font-citri-sans font-bold text-citri-gray-900 text-xl mb-2">Calendario de cítricos</h3>
+          <p class="text-citri-gray-600 text-sm leading-snug mb-4">
+            Consulta cuándo está disponible cada variedad de limón, naranja y mandarina según su temporada de recolección.
+          </p>
+          @if (activeCalendar()) {
+            <button
+              type="button"
+              (click)="scrollToCalendar()"
+              class="inline-flex items-center gap-2 px-5 py-2.5 bg-citri-green text-white font-semibold rounded-citri-md hover:bg-citri-green-dark transition-colors duration-200 text-sm"
+            >
+              Ver calendario arriba
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+              </svg>
+            </button>
+          } @else {
+            <p class="text-citri-gray-500 text-sm italic">Selecciona una categoría para ver su calendario de cosecha.</p>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<!--
+Calibre 1-XXX (+78Ø) mm
+Calibre 1-XX (67–78Ø) mm
+Calibre 1-X (63–74Ø) mm
+Calibre 2 (58–69Ø) mm
+Calibre 3 (54–64Ø) mm
+Calibre 4 (50–60Ø) mm
+Calibre 5 (46-56Ø) mm
+Calibre 6 (43–52Ø) mm
+Calibre 7 (41-48Ø) mm
+Calibre 8 (39–46Ø) mm
+
+Calibre 0 (92–110Ø) mm
+Calibre 1 (87–100Ø) mm
+Calibre 2 (84–96Ø) mm
+Calibre 3 (81–92Ø) mm
+Calibre 4 (77–88Ø) mm
+Calibre 5 (73–84Ø) mm
+Calibre 6 (70–80Ø) mm
+Calibre 7 (67–76Ø) mm
+Calibre 8 (64–73Ø) mm
+Calibre 9 (62–70Ø) mm
+Calibre 10 (60–68Ø) mm
+
+Calidad I Extra
+Calidad Primera
+Calidad I Standar
+Calidad Standar
+Calidad Segunda
+
+Caja 6kg
+Caja 10kg
+Caja 15kg
+Malla
+ -->
+

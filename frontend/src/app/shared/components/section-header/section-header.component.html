@@ -1,0 +1,9 @@
+<div [class]="align === 'center' ? 'text-left md:text-center' : 'text-left'">
+  @if (eyebrow) {
+    <p class="text-citri-green text-sm font-semibold uppercase tracking-wide mb-2">{{ eyebrow }}</p>
+  }
+  <h2 class="font-citri-sans font-bold text-citri-gray-900 text-2xl md:text-3xl lg:text-4xl">{{ title }}</h2>
+  @if (description) {
+    <p class="text-citri-gray-600 mt-3 text-base md:text-lg font-medium">{{ description }}</p>
+  }
+</div>

@@ -1,0 +1,239 @@
+<div class="min-h-screen bg-citri-gray-50">
+
+  <!-- Header -->
+  <div class="bg-citri-green">
+    <div class="max-w-6xl mx-auto px-4 py-8 md:py-10">
+      <div>
+        <p class="text-white text-sm font-medium uppercase tracking-wide mb-1">Admin</p>
+        <h1 class="font-citri-sans font-bold text-white text-2xl md:text-3xl">Productos</h1>
+        <p class="text-white text-sm mt-1">Gestiona productos, imágenes y características.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Back link -->
+  <div class="max-w-6xl mx-auto px-4 pt-6 pb-0">
+    <a routerLink="/admin"
+      class="inline-flex items-center gap-1.5 text-sm font-medium text-citri-gray-600 hover:text-citri-green transition-colors">
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+      </svg>
+      Panel admin
+    </a>
+  </div>
+
+  <div class="max-w-6xl mx-auto px-4 py-8 md:py-10 space-y-6">
+
+    <!-- Category selector -->
+    <div class="bg-white rounded-citri-lg shadow-citri-card p-6">
+      <div class="flex items-start gap-3 mb-4">
+        <div class="w-10 h-10 rounded-citri-md bg-citri-green-light flex items-center justify-center shrink-0">
+          <svg class="w-5 h-5 text-citri-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12" />
+          </svg>
+        </div>
+        <div class="flex-1 min-w-0">
+          <h2 class="font-citri-sans font-bold text-citri-green text-lg">Seleccionar categoría</h2>
+          <p class="text-citri-gray-600 text-sm mt-0.5">Elige una categoría para gestionar sus productos</p>
+        </div>
+      </div>
+      <select
+        class="w-full px-4 py-3 rounded-citri-md border-2 border-citri-gray-200 text-citri-gray-900 text-sm bg-white focus:outline-none focus:ring-2 focus:border-citri-green focus:ring-citri-green/20 transition-colors hover:border-citri-green"
+        [value]="selectedCategoryId() ?? ''"
+        (change)="onCategoryChange($any($event.target).value)"
+      >
+        <option value="">Selecciona una categoría</option>
+        @for (category of categories(); track category.id) {
+          <option [value]="category.id">{{ category.name }}</option>
+        }
+      </select>
+    </div>
+
+    <!-- Create product form -->
+    @if (selectedCategoryId()) {
+      <div class="bg-white rounded-citri-lg shadow-citri-card p-6">
+        <div class="flex items-start gap-3 mb-4">
+          <div class="w-10 h-10 rounded-citri-md bg-citri-green-light flex items-center justify-center shrink-0">
+            <svg class="w-5 h-5 text-citri-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <h2 class="font-citri-sans font-bold text-citri-green text-lg">Crear nuevo producto</h2>
+            <p class="text-citri-gray-600 text-sm mt-0.5">Añade un producto a la categoría seleccionada</p>
+          </div>
+        </div>
+        <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-3">
+          <div class="grid gap-3 sm:grid-cols-2">
+            <input formControlName="name" placeholder="Nombre del producto"
+              class="w-full px-4 py-3 rounded-citri-md border-2 border-citri-gray-200 text-citri-gray-900 text-sm focus:outline-none focus:ring-2 focus:border-citri-green focus:ring-citri-green/20 transition-colors hover:border-citri-green" />
+            <input formControlName="description" placeholder="Descripción opcional"
+              class="w-full px-4 py-3 rounded-citri-md border-2 border-citri-gray-200 text-citri-gray-900 text-sm focus:outline-none focus:ring-2 focus:border-citri-green focus:ring-citri-green/20 transition-colors hover:border-citri-green" />
+          </div>
+          <button type="submit"
+            class="w-full sm:w-auto px-6 py-3 bg-citri-green text-white text-sm font-semibold rounded-citri-md hover:bg-citri-green-dark transition-colors shadow-sm">
+            Crear producto
+          </button>
+        </form>
+      </div>
+    }
+
+    <!-- Feedback -->
+    @if (successMessage()) {
+      <div class="rounded-citri-sm bg-citri-green-light border border-citri-green px-4 py-3" role="status">
+        <p class="text-citri-green text-sm font-medium">{{ successMessage() }}</p>
+      </div>
+    }
+    @if (errorMessage()) {
+      <div class="rounded-citri-sm bg-red-50 border border-red-200 px-4 py-3" role="alert">
+        <p class="text-red-700 text-sm">{{ errorMessage() }}</p>
+      </div>
+    }
+
+    <!-- Products list -->
+    <div class="bg-white rounded-citri-lg shadow-citri-card p-6">
+      <div class="flex items-start gap-3 mb-4">
+        <div class="w-10 h-10 rounded-citri-md bg-citri-green-light flex items-center justify-center shrink-0">
+          <svg class="w-5 h-5 text-citri-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+          </svg>
+        </div>
+        <div class="flex-1 min-w-0">
+          <h2 class="font-citri-sans font-bold text-citri-green text-lg">
+            @if (selectedCategoryName()) {
+              Productos de {{ selectedCategoryName() }}
+            } @else {
+              Productos
+            }
+          </h2>
+          <p class="text-citri-gray-600 text-sm mt-0.5">Gestiona productos, imágenes y opciones</p>
+        </div>
+      </div>
+
+      @if (isLoading()) {
+        <div class="flex items-center justify-center py-8">
+          <p class="text-sm text-citri-gray-600">Cargando productos...</p>
+        </div>
+      } @else if (!selectedCategoryId()) {
+        <div class="text-center py-8">
+          <svg class="w-12 h-12 mx-auto text-citri-gray-300 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+          </svg>
+          <p class="text-sm text-citri-gray-600">Selecciona una categoría para gestionar sus productos</p>
+        </div>
+      } @else if (products().length === 0) {
+        <div class="text-center py-8">
+          <svg class="w-12 h-12 mx-auto text-citri-gray-300 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+          </svg>
+          <p class="text-sm text-citri-gray-600">Todavía no hay productos en esta categoría</p>
+        </div>
+      } @else {
+        <div class="space-y-4">
+          @for (product of products(); track product.id) {
+            <article class="rounded-citri-lg border-2 border-citri-gray-100 p-5 hover:border-citri-green transition-colors">
+              <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                <div class="flex-1 min-w-0">
+                  <h3 class="font-semibold text-citri-green text-base">{{ product.name }}</h3>
+                  <p class="mt-1 text-sm text-citri-gray-600">{{ product.description || 'Sin descripción' }}</p>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                  <a
+                    [routerLink]="['/admin/opciones']"
+                    [queryParams]="{ productId: product.id, categoryId: selectedCategoryId() }"
+                    class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-citri-md bg-citri-green text-white hover:bg-citri-green-dark transition-colors shadow-sm"
+                  >
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
+                    </svg>
+                    Configurar
+                  </a>
+                  <button type="button"
+                    class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-citri-md border-2 border-citri-gray-200 text-citri-gray-700 hover:border-citri-green hover:text-citri-green transition-colors"
+                    (click)="toggleImageManager(product.id)">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                    </svg>
+                    @if (selectedProductId() === product.id) { Ocultar } @else { Imágenes }
+                  </button>
+                </div>
+              </div>
+
+              @if (selectedProductId() === product.id) {
+                <div class="mt-5 pt-5 border-t-2 border-citri-gray-100">
+                  <div class="flex items-center gap-2 mb-4">
+                    <svg class="w-5 h-5 text-citri-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                    </svg>
+                    <h3 class="font-semibold text-citri-green text-sm">Gestión de imágenes</h3>
+                  </div>
+                  <p class="text-xs text-citri-gray-600 mb-4">
+                    Selecciona un archivo y pulsa <strong>Subir imagen</strong> para añadirlo al producto.
+                  </p>
+
+                  <input #fileInput type="file" accept="image/*" class="hidden"
+                    (change)="onFileSelected(product.id, $event)" />
+
+                  <div class="flex flex-wrap items-center gap-2 mb-4">
+                    <button type="button"
+                      class="inline-flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium rounded-citri-md border-2 border-citri-gray-200 text-citri-gray-700 hover:border-citri-green hover:text-citri-green transition-colors"
+                      (click)="openFilePicker(fileInput)">
+                      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
+                      </svg>
+                      Seleccionar imagen
+                    </button>
+                    <button type="button"
+                      class="inline-flex items-center gap-1.5 px-4 py-2.5 text-sm font-semibold rounded-citri-md bg-citri-green text-white hover:bg-citri-green-dark transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                      [disabled]="uploadingImage() || !selectedFileName()"
+                      (click)="uploadSelectedImage(product.id)">
+                      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
+                      </svg>
+                      Subir imagen
+                    </button>
+                    @if (selectedFileName()) {
+                      <span class="text-xs text-citri-gray-600 px-3 py-2 bg-citri-gray-50 rounded-citri-md">{{ selectedFileName() }}</span>
+                    }
+                    @if (uploadingImage()) {
+                      <span class="text-xs text-citri-green font-medium">Subiendo...</span>
+                    }
+                  </div>
+
+                  @if (selectedProductImages().length === 0) {
+                    <div class="text-center py-6 bg-citri-gray-50 rounded-citri-md">
+                      <svg class="w-10 h-10 mx-auto text-citri-gray-300 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                      </svg>
+                      <p class="text-xs text-citri-gray-600">Todavía no hay imágenes para este producto</p>
+                    </div>
+                  } @else {
+                    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                      @for (image of selectedProductImages(); track image.id) {
+                        <div class="group rounded-citri-lg border-2 border-citri-gray-100 overflow-hidden hover:border-citri-green transition-colors">
+                          <div class="aspect-video bg-citri-gray-50 overflow-hidden">
+                            <img [src]="resolveImageUrl(image.imagePath)" [alt]="'Imagen ' + product.name"
+                              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                          </div>
+                          <div class="flex items-center justify-between gap-2 p-3 bg-white">
+                            <span class="text-xs text-citri-gray-600 truncate flex-1">{{ image.imagePath }}</span>
+                            <button type="button"
+                              class="shrink-0 px-3 py-1.5 text-xs font-medium rounded-citri-md bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 transition-colors"
+                              (click)="deleteImage(image.id)">
+                              Eliminar
+                            </button>
+                          </div>
+                        </div>
+                      }
+                    </div>
+                  }
+                </div>
+              }
+            </article>
+          }
+        </div>
+      }
+    </div>
+
+  </div>
+</div>
