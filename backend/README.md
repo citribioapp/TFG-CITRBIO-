@@ -484,16 +484,3 @@ Arrancar local:
 ```bash
 php -S 127.0.0.1:8080 -t public
 ```
-
-## Notas para exposicion
-
-Para explicar el backend en una presentacion:
-
-- Es una API REST construida con Symfony.
-- Usa arquitectura por capas: controladores, DTOs, entidades, repositorios y servicios.
-- Doctrine ORM conecta las entidades PHP con una base de datos relacional MySQL/MariaDB.
-- La seguridad se basa en JWT y roles (`ROLE_USER`, `ROLE_ADMIN`).
-- Swagger documenta los endpoints y permite probar la API.
-- Railway automatiza el despliegue desde GitHub.
-- Las migraciones mantienen controlado el esquema de base de datos.
-- Los correos transaccionales se gestionan desde backend para no exponer claves en el frontend.
